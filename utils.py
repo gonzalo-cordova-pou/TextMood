@@ -21,3 +21,15 @@ stopwords_english = stopwords.words('english')
 from nltk.stem import PorterStemmer
 stemmer = PorterStemmer()
 
+
+def process_tweet(tweet):
+    '''
+    Input: 
+        tweet: a string containing a tweet
+    Output:
+        clean_tweet: a list of words containing the processed tweet
+    
+    '''
+    clean_tweet = []
+    
+return clean_tweet

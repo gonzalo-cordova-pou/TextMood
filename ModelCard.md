@@ -1,4 +1,4 @@
-# Model Card
+# TextMood Model - Model Card
 
 ### Model details
 * Sentiment analysis with deep neural network using social network data

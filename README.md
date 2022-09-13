@@ -6,6 +6,10 @@
 * Model date: September 2022
 * Model version: 1.0
 * Send questions or comments about the model to ...
+
+![Model architecture](./static/nn.jpg)
+
+
 ### Intended use
 * Intended to be used by corportations to detect and analyse user's mood by reading their social text messages
 * Not intended to make judgments about specific users

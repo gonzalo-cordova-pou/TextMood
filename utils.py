@@ -48,6 +48,8 @@ def process_tweet(tweet):
     for word in tweet_tokens:
         if (word not in stopwords_english and # remove stopwords
             word not in string.punctuation): # remove punctuation
-            clean_tweet.append(word)
+            #clean_tweet.append(word)
+            stem_word = stemmer.stem(word) # stemming word
+            clean_tweet.append(stem_word)
     
     return clean_tweet

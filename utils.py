@@ -30,10 +30,20 @@ def tweet2tensor(tweet, vocab_dict, unk_token='__UNK__', verbose=False):
         unk_token - The special string for unknown tokens
         verbose - Print info durign runtime
     Output:
-        tensor_l - A python list with
+        tensor - A python list withunique integer IDs
+        representing the processed tweet
         
     '''
 
-    tensor_l = []
+    words = process_tweet(tweet)
 
-    return tensor_l
+    tensor = []
+
+    unk_ID = vocab_dict[unk_token]
+
+    for word in words:
+        word_ID = vocab_dict[word] if word in vocab_dict else unk_ID
+        tensor.append(word_ID) 
+
+
+    return tensor

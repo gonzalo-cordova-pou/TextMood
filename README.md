@@ -17,7 +17,8 @@
 * Subjectivity when evaluating the polarity of the tweet (0 = negative, 2 = neutral, 4 = positive) may affect the performance and trustworthiness of the model
 * Other factors such as race, gender, sexual orientation or health are not taken into account as the data used are simply tweets extracted by the Twitter API
 ### Metrics
-*
+* Model trained using tl.CrossEntropyLoss optimized with the trax.optimizers.Adam optimizer
+* Tracking the accuracy using tl.Accuracy metric. We also track tl.CrossEntropyLoss on the validation set.
 ### Training data
 * Dataset: Sentiment140 dataset with 1.6 million tweets https://www.kaggle.com/datasets/kazanova/sentiment140 (%)
 * Preprocessing...

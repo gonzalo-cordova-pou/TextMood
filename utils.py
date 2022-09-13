@@ -35,13 +35,17 @@ def tweet2tensor(tweet, vocab_dict, unk_token='__UNK__', verbose=False):
         
     '''
 
+    # Process the tweet into a clean list of words
     words = process_tweet(tweet)
 
     tensor = []
 
-    unk_ID = vocab_dict[unk_token]
+    unk_ID = vocab_dict[unk_token] # unknown token id
 
     for word in words:
+
+        # Get the unique integer id of each word
+
         word_ID = vocab_dict[word] if word in vocab_dict else unk_ID
         tensor.append(word_ID) 
 

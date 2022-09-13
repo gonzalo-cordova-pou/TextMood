@@ -30,6 +30,24 @@ def process_tweet(tweet):
         clean_tweet: a list of words containing the processed tweet
     
     '''
-    clean_tweet = []
+
+    # remove stock market tickers like $GE
+    tweet = re.sub(r'\$\w*', '', tweet)
+    # remove old style retweet text "RT"
+    tweet = re.sub(r'^RT[\s]+', '', tweet)
+    # remove hyperlinks
+    tweet = re.sub(r'https?:\/\/.*[\r\n]*', '', tweet)
+    # remove hashtags
+    # only removing the hash # sign from the word
+    tweet = re.sub(r'#', '', tweet)
+    # tokenize tweets
+    tokenizer = TweetTokenizer(preserve_case=False, strip_handles=True, reduce_len=True)
+    tweet_tokens = tokenizer.tokenize(tweet)
     
-return clean_tweet
+    clean_tweet = []
+    for word in tweet_tokens:
+        if (word not in stopwords_english and # remove stopwords
+            word not in string.punctuation): # remove punctuation
+            clean_tweet.append(word)
+    
+    return clean_tweet

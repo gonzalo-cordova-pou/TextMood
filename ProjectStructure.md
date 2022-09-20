@@ -1,8 +1,12 @@
 The directory structure of your new project looks like this: 
 
 ```
-├── README.md          <- Information about the project displayed with a Model Card format
-├── DatasetCard.md     <- Information about the dataset 
+├── static             <- Provisional static files
+├── .gitignore             <- Provisional static files
 ├── data               <- 
 ├── models             <- Trained models
+├── DatasetCard.md     <- Dataset information 
+├── README.md          <- Project information displayed using a Model Card format
+├── requirements.txt   <- 
+├── utils.py           <- Trained models
 ```

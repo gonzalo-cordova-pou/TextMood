@@ -2,7 +2,7 @@ The directory structure of your new project looks like this:
 
 ```
 ├── static             <- Provisional static files
-├── .gitignore             <- Provisional static files
+├── .gitignore         <- 
 ├── data               <- 
 ├── models             <- Trained models
 ├── DatasetCard.md     <- Dataset information 

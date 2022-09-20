@@ -1,5 +1,24 @@
 ---
-TODO: Add YAML tags here. Copy-paste the tags obtained with the online tagging app: https://huggingface.co/spaces/huggingface/datasets-tagging
+language:
+- en
+language_creators:
+- found
+multilinguality:
+- monolingual
+pretty_name: Sentiment Analysis
+size_categories:
+- 1M<n<10M
+source_datasets:
+- original
+tags:
+- twitter
+- tweet
+- tweets
+task_categories:
+- text-classification
+task_ids:
+- multi-label-classification
+- sentiment-classification
 ---
 
 # Dataset Card for Sentiment140

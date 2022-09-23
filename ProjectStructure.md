@@ -1,12 +1,21 @@
 The directory structure of y¡our new project looks like this: 
 
 ```
-├── static             <- Provisional static files
-├── .gitignore         <- 
-├── data               <- 
-├── models             <- Trained models
-├── DatasetCard.md     <- Dataset information 
-├── README.md          <- Project information displayed using a Model Card format
-├── requirements.txt   <- 
-├── utils.py           <- Trained models
+├── data
+│   └── raw
+│       └── training.1600000.processed.noemoticon.csv.dvc
+├── src
+│   ├── evaluate.py
+│   ├── our_model.py
+│   ├── prepare.py
+│   ├── train.py
+│   ├── trax_models.py
+│   └── utils.py
+├── static
+│   └── nn.jpg
+├── DatasetCard.md
+├── ProjectStructure.md
+├── README.md
+└── requirements.txt
+
 ```

@@ -1,4 +1,4 @@
-The directory structure of y¡our new project looks like this: 
+The directory structure of our project looks like this: 
 
 ```
 ├── data

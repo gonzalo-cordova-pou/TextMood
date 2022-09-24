@@ -4,7 +4,7 @@ The directory structure of our project looks like this:
 ├── data
 │   └── raw
 │       └── training.1600000.processed.noemoticon.csv.dvc
-├── src
+├── src                  <- Source code for use in this project 
 │   ├── evaluate.py
 │   ├── our_model.py
 │   ├── prepare.py
@@ -13,9 +13,9 @@ The directory structure of our project looks like this:
 │   └── utils.py
 ├── static
 │   └── nn.jpg
-├── DatasetCard.md
+├── DatasetCard.md       <- Detailed information about the dataset used in this project
 ├── ProjectStructure.md
 ├── README.md
-└── requirements.txt
+└── requirements.txt     <- Requirements file for reproducing the analysis environment
 
 ```

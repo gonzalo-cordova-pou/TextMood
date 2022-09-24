@@ -14,8 +14,8 @@ The directory structure of our project looks like this:
 ├── static
 │   └── nn.jpg
 ├── DatasetCard.md       <- Detailed information about the dataset used in this project
-├── ProjectStructure.md
-├── README.md
+├── ProjectStructure.md  <- Directory structure of our project
+├── README.md            <- The top-level README following a model card format
 └── requirements.txt     <- Requirements file for reproducing the analysis environment
 
 ```

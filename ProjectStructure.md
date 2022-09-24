@@ -7,7 +7,7 @@ The directory structure of our project looks like this:
 ├── src                  <- Source code for use in this project 
 │   ├── evaluate.py      <- Script for model prediction and model evaluation
 │   ├── our_model.py     <- Script to define our classifier
-│   ├── prepare.py
+│   ├── prepare.py       <- Script for data ingestion and data preparation
 │   ├── train.py         <- Script for training setup and model training 
 │   ├── trax_models.py
 │   └── utils.py

@@ -23,7 +23,6 @@ metrics:
 * Send questions or comments about the model to textmoodupc@gmail.com
 
 ![Model architecture](./static/nn.jpg)
-
 ### Intended use
 * Intended to be used by corportations to detect and analyse user's mood by reading their social text messages
 * Not intended to make judgments about specific users

@@ -16,7 +16,6 @@ metrics:
 
 
 ## Table of Contents
-- [Table of Contents](#table-of-contents)
 - [Model details](#Model-details)
 - [Intended use](#Intended-use)
 - [Factors](#Factors)

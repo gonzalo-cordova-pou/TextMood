@@ -1,11 +1,11 @@
-# TextMood Model - Model Card
+# TextMood Model Card
 
 ### Model details
 * Sentiment analysis with deep neural network using social network data
 * Developed by the TextMood team in the context of TAED II course
 * Model date: September 2022
 * Model version: 1.0
-* Send questions or comments about the model to ...
+* Send questions or comments about the model to textmoodupc@gmail.com
 
 ![Model architecture](./static/nn.jpg)
 

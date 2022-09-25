@@ -6,7 +6,10 @@ nltk.download('twitter_samples')
 nltk.download('stopwords')
 from nltk.tokenize import TweetTokenizer
 from nltk.corpus import stopwords, twitter_samples 
-
+import pandas as pd
+import numpy as np
+import random as rnd
+from trax.supervised import training
 tweet_tokenizer = TweetTokenizer(preserve_case=False, strip_handles=True, reduce_len=True)
 
 # Stop words are messy and not that compelling; 
@@ -20,6 +23,29 @@ stopwords_english = stopwords.words('english')
 # Also have my doubts about stemming...
 from nltk.stem import PorterStemmer
 stemmer = PorterStemmer()
+
+def provisional_load_tweets():
+    df_raw = pd.read_csv('training.1600000.processed.noemoticon.csv', encoding = "ISO-8859-1", header=None)
+    # As the data has no column titles, we will add our own
+    df_raw.columns = ["label", "time", "date", "query", "username", "text"]
+
+    df = df_raw[['label', 'text']]
+
+    # Separating positive and negative rows
+    df_pos = df[df['label'] == 4]
+    df_neg = df[df['label'] == 0]
+    
+    # Only retaining 1/4th of our data from each output group
+    # Feel free to alter the dividing factor depending on your workspace
+    # 1/64 is a good place to start if you're unsure about your machine's power
+    df_pos = df_pos.iloc[:int(len(df_pos)/64)]
+    df_neg = df_neg.iloc[:int(len(df_neg)/64)]
+    print(len(df_pos), len(df_neg))
+
+    all_positive_tweets = df_pos.text.to_list()
+    all_negative_tweets = df_neg.text.to_list()
+
+    return all_positive_tweets, all_negative_tweets
 
 
 def process_tweet(tweet):
@@ -135,7 +161,6 @@ def data_generator(data_pos, data_neg, batch_size, loop, vocab_dict, shuffle=Fal
         batch = []
         
         # First part: Pack n_to_take positive examples
-        
         # Start from pos_index and increment i up to n_to_take
         for i in range(n_to_take):
                     
@@ -158,7 +183,7 @@ def data_generator(data_pos, data_neg, batch_size, loop, vocab_dict, shuffle=Fal
             tweet = data_pos[pos_index_lines[pos_index]]
             
             # convert the tweet into tensors of integers representing the processed words
-            tensor = tweet_to_tensor(tweet, vocab_dict)
+            tensor = tweet2tensor(tweet, vocab_dict)
             
             # append the tensor to the batch list
             batch.append(tensor)
@@ -167,7 +192,7 @@ def data_generator(data_pos, data_neg, batch_size, loop, vocab_dict, shuffle=Fal
             pos_index = pos_index + 1
 
         # Second part: Pack n_to_take negative examples
-    
+
         # Using the same batch list, start from neg_index and increment i up to n_to_take
         for i in range(n_to_take):
             
@@ -189,13 +214,13 @@ def data_generator(data_pos, data_neg, batch_size, loop, vocab_dict, shuffle=Fal
             tweet = data_neg[neg_index_lines[neg_index]]
             
             # convert the tweet into tensors of integers representing the processed words
-            tensor = tweet_to_tensor(tweet, vocab_dict)
+            tensor = tweet2tensor(tweet, vocab_dict)
             
             # append the tensor to the batch list
             batch.append(tensor)
             
             # Increment neg_index by one
-            neg_index += 1         
+            neg_index += 1
 
         if stop:
             break;
@@ -253,10 +278,11 @@ def data_generator(data_pos, data_neg, batch_size, loop, vocab_dict, shuffle=Fal
         example_weights = np.ones_like(targets)
         
         # note we use yield and not return
+        yield inputs, targets, example_weights
 
 def train_model(classifier, train_task, eval_task, n_steps, output_dir):
     '''
-    Input: 
+    Input:
         classifier - the model you are building
         train_task - Training task
         eval_task - Evaluation task
@@ -367,7 +393,7 @@ def test_model(generator, model):
 
 # this is used to predict on your own sentnece
 def predict(sentence):
-    inputs = np.array(tweet_to_tensor(sentence, vocab_dict=Vocab))
+    inputs = np.array(tweet2tensor(sentence, vocab_dict=Vocab))
     
     # Batch size 1, add dimension for batch, to work with the model
     inputs = inputs[None, :]  

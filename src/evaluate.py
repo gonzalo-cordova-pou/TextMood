@@ -1,30 +1,13 @@
 
 
+import os
+import numpy as np
+import trax
+from our_model import classifier
 
-
-
-
-# ================ #
-# MODEL PREDICTION #
-# ================ # 
-
-# Create a generator object
-tmp_train_generator = train_generator(16)
-
-# get one batch
-tmp_batch = next(tmp_train_generator)
-
-# Position 0 has the model inputs (tweets as tensors)
-# position 1 has the targets (the actual labels)
-tmp_inputs, tmp_targets, tmp_example_weights = tmp_batch
-
-# feed the tweet tensors into the model to get a prediction
-tmp_pred = training_loop.eval_model(tmp_inputs)
-
-# turn probabilites into category predictions
-tmp_is_positive = tmp_pred[:,1] > tmp_pred[:,0]
-for i, p in enumerate(tmp_is_positive):
-    print(f"Neg log prob {tmp_pred[i,0]:.4f}\tPos log prob {tmp_pred[i,1]:.4f}\t is positive? {p}\t actual {tmp_targets[i]}")
+output_dir = '../models/'
+tmp_model = classifier()
+tmp_model.init_from_file(output_dir)
 
 
 # ================ #
@@ -33,6 +16,7 @@ for i, p in enumerate(tmp_is_positive):
 
 # test your function
 tmp_val_generator = val_generator(64)
+
 
 # get one batch
 tmp_batch = next(tmp_val_generator)

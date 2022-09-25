@@ -35,7 +35,7 @@ metrics:
 
 ![Model architecture](./static/nn.jpg)
 ### Intended use
-* Intended to be used by corportations to detect and analyse user's mood by reading their social text messages
+* Intended to be strictly used to detect and classify user's mood. It is not allowed to benefit or make a profit from this information.
 * Not intended to make judgments about specific users
 ### Factors
 * Subjectivity when evaluating the polarity of the tweet (0 = negative, 4 = positive) may affect the performance and trustworthiness of the model
@@ -53,3 +53,4 @@ metrics:
 *
 ### Ethical considerations
 * TextMood team follows values such as transparency, privacy, non-discrimination and societal and environmental wellbeing
+* As previosuly stated, this model cannot be used for gaining personal or commercial profit by knowing users' mood.

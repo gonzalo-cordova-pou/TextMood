@@ -3,9 +3,9 @@ language:
 - en
 tags:
 - Natural language processing
-- Classification
-- Tweets analysis
+- Sentiment classification
 - Mood detection
+- Tweets analysis
 datasets:
 - Sentiment140
 metrics:

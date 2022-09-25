@@ -14,6 +14,11 @@ metrics:
 ---
 # TextMood Model Card
 
+
+## Table of Contents
+- [Table of Contents](#table-of-contents)
+- [Model details](#Model-details)
+
 ### Model details
 * Sentiment analysis task with deep neural network using social network data
 * In particular, detection of users' mood classifying it as positive or negative by simply reading their tweets
@@ -35,7 +40,7 @@ metrics:
 ### Training data
 * Dataset: Sentiment140 dataset with 1.6 million tweets https://www.kaggle.com/datasets/kazanova/sentiment140 (80% used for training)
 * Preprocessing...
-* For further information see the Dataset Card
+* For further information see our Dataset Card: https://github.com/gonzalo-cordova-pou/TextMood/blob/main/DatasetCard.md
 ### Evaluation data
 * Same dataset: Sentiment140 dataset with 1.6 million tweets https://www.kaggle.com/datasets/kazanova/sentiment140 (20% remaining used for testing)
 ### Quantitative analyses

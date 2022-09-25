@@ -26,7 +26,7 @@ metrics:
 - [Ethical considerations](#Ethical-considerations)
 
 ### Model details
-* Sentiment analysis task with deep neural network using social network data
+* Sentiment classification task with deep neural network using social network data
 * In particular, detection of users' mood classifying it as positive or negative by simply reading their tweets
 * Developed by the TextMood team in the context of TAED II course
 * Model date: September 2022
@@ -44,11 +44,12 @@ metrics:
 * Model trained using tl.CrossEntropyLoss optimized with the trax.optimizers.Adam optimizer
 * Tracking the accuracy using tl.Accuracy metric. We also track tl.CrossEntropyLoss on the validation set.
 ### Training data
-* Dataset: Sentiment140 dataset with 1.6 million tweets https://www.kaggle.com/datasets/kazanova/sentiment140 (80% used for training)
-* Preprocessing...
+* Dataset used: Sentiment140 dataset with 1.6 million tweets https://www.kaggle.com/datasets/kazanova/sentiment140 (80% used for training)
+* Tweets preprocessing: Removing stop words, stemming, removing hyperlinks and hashtags (only the sign # from the word) and tokenizing the tweets. Once the tweet is cleaned, we convert it to a tensor (using tweet2tensor function).
 * For further information see our Dataset Card: https://github.com/gonzalo-cordova-pou/TextMood/blob/main/DatasetCard.md
 ### Evaluation data
 * Same dataset: Sentiment140 dataset with 1.6 million tweets https://www.kaggle.com/datasets/kazanova/sentiment140 (20% remaining used for testing)
+* The same preprocessing steps are applied as we use the same dataset
 ### Quantitative analyses
 *
 ### Ethical considerations

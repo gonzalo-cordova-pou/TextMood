@@ -26,7 +26,7 @@ metrics:
 - [Ethical considerations](#Ethical-considerations)
 
 ### Model details
-* Sentiment classification task with deep neural network using social network data
+* Sentiment classification task with deep neural networks using social network data
 * In particular, detection of users' mood classifying it as positive or negative by simply reading their tweets
 * Developed by the TextMood team in the context of TAED II course
 * Model date: September 2022

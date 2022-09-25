@@ -1,5 +1,3 @@
-# TextMood Model Card
-
 ---
 language:
 - en
@@ -14,6 +12,7 @@ metrics:
 - bleu
 - sacrebleu
 ---
+# TextMood Model Card
 
 ### Model details
 * Sentiment analysis task with deep neural network using social network data

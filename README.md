@@ -18,6 +18,13 @@ metrics:
 ## Table of Contents
 - [Table of Contents](#table-of-contents)
 - [Model details](#Model-details)
+- [Intended use](#Intended-use)
+- [Factors](#Factors)
+- [Metrics](#Metrics)
+- [Training data](#Training-data)
+- [Evaluation data](#Evaluation-data)
+- [Quantitative analyses](#Quantitative-analyses)
+- [Ethical considerations](#Ethical-considerations)
 
 ### Model details
 * Sentiment analysis task with deep neural network using social network data

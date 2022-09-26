@@ -1,6 +1,7 @@
 The directory structure of our project: 
 
 ```
+├── README.md              <- The top-level README following a model card format
 ├── data                   <- DVC
 │   └── raw
 │       └── training.1600000.processed.noemoticon.csv.dvc
@@ -16,7 +17,6 @@ The directory structure of our project:
 │   └── nn.jpg
 ├── DatasetCard.md         <- Dataset information
 ├── ProjectStructure.md    <- Directory structure of our project
-├── README.md              <- The top-level README following a model card format
 ├── requirements.txt       <- Requirements file for reproducing the analysis environment
 └── Untitled.ipynb         <- Tweets processing
 ```

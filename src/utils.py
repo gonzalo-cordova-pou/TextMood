@@ -38,8 +38,8 @@ def provisional_load_tweets():
     # Only retaining 1/4th of our data from each output group
     # Feel free to alter the dividing factor depending on your workspace
     # 1/64 is a good place to start if you're unsure about your machine's power
-    df_pos = df_pos.iloc[:int(len(df_pos)/32)]
-    df_neg = df_neg.iloc[:int(len(df_neg)/32)]
+    df_pos = df_pos.iloc[:int(len(df_pos)/6)]
+    df_neg = df_neg.iloc[:int(len(df_neg)/6)]
     print(len(df_pos), len(df_neg))
 
     all_positive_tweets = df_pos.text.to_list()

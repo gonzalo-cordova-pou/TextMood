@@ -102,31 +102,12 @@ with mlflow.start_run():
 
     training_loop = u.train_model(model, train_task, eval_task, 100, output_dir)
 
-
-    #with mlflow.start_run(run_name=run_name):
-    #    mlflow.log_param("batch_size", batch_size)
-    #    mlflow.log_param("learning_rate", learning_rate)
-    #    mlflow.log_param("epochs", epochs)
-    #    mlflow.log_metric("train_loss", train_loss)
-    #    mlflow.log_metric("train_accuracy", train_acc)
-    #    mlflow.log_metric("val_loss", val_loss)
-    #    mlflow.log_metric("val_accuracy", val_acc)
-    #    mlflow.log_artifacts("./model")
-
     print("####### CHECKPOINT 5 ########")
 
     #pyfunc_model = pyfunc.load_model(mlflow.get_artifact_uri("model"))
 
 
 
-import os
-import numpy as np
-import trax
-from our_model import classifier
-import utils as u
-import json
-import prepare as pr
-from trax.supervised import training
 
 # Create the validation data generator
 def val_generator(batch_size, shuffle = False):

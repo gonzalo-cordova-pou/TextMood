@@ -85,3 +85,5 @@ The data is not split, so the user is expected to do it in order to train and te
 
 #### Initial Data Collection and annotation
 
+Dataset creators highlight that approach was unique because the training data was automatically created, as opposed to having humans manual annotate tweets. They we assume that any tweet with positive emoticons, like :), were positive, and tweets with negative emoticons, like :(, were negative. They used the Twitter Search API to collect these tweets by using keyword search.
+

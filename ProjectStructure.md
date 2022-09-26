@@ -4,7 +4,7 @@ The directory structure of our project:
 ├── data                   <- DVC
 │   └── raw
 │       └── training.1600000.processed.noemoticon.csv.dvc
-├── models
+├── models                 <- Trained models
 ├── src                    <- Source code and MLflow
 │   ├── mlruns             <- Experiment tracking
 │   ├── our_model.py       <- Classifier

@@ -10,7 +10,59 @@ import pandas as pd
 import numpy as np
 import random as rnd
 from trax.supervised import training
+from pathlib import Path
 tweet_tokenizer = TweetTokenizer(preserve_case=False, strip_handles=True, reduce_len=True)
+
+def load_data():
+    prepared_folder_path = Path("data/processed")
+    X_train_path = prepared_folder_path / "X_train.txt"
+    y_train_path = prepared_folder_path / "y_train.txt"
+    X_valid_path = prepared_folder_path / "X_valid.txt"
+    y_valid_path = prepared_folder_path / "y_valid.txt"
+    train_pos_path = prepared_folder_path / "train_pos.txt"
+    train_neg_path = prepared_folder_path / "train_neg.txt"
+    val_pos_path = prepared_folder_path / "val_pos.txt"
+    val_neg_path = prepared_folder_path / "val_neg.txt"
+    vocab_path = prepared_folder_path / "vocab.json"
+
+    train_x = open(X_train_path, encoding = 'utf-8').readlines()
+    for i in range(len(train_x)):
+        train_x[i] = train_x[i].replace('\n', '')
+
+    val_x = open(X_valid_path, encoding = 'utf-8').readlines()
+    for i in range(len(val_x)):
+        val_x[i] = val_x[i].replace('\n', '')
+
+    train_pos = open(train_pos_path, encoding = 'utf-8').readlines()
+    for i in range(len(train_pos)):
+        train_pos[i] = train_pos[i].replace('\n', '')
+
+    train_neg = open(train_neg_path, encoding = 'utf-8').readlines()
+    for i in range(len(train_neg)):
+        train_neg[i] = train_neg[i].replace('\n', '')
+
+    val_neg = open(val_neg_path, encoding = 'utf-8').readlines()
+    for i in range(len(val_neg)):
+        val_neg[i] = val_neg[i].replace('\n', '')
+
+    val_pos = open(val_pos_path, encoding = 'utf-8').readlines()
+    for i in range(len(val_pos)):
+        val_pos[i] = val_pos[i].replace('\n', '')
+
+    val_y = open(y_valid_path, encoding = 'utf-8').readlines()
+    for i in range(len(val_y)):
+        val_y[i] = float(List[i])
+    val_y = np.array(val_y)
+
+    train_y = open(y_train_path, encoding = 'utf-8').readlines()
+    for i in range(len(train_y)):
+        val_y[i] = float(List[i])
+    train_y = np.array(train_y)
+
+    json_file = open(vocab_path, 'r', encoding = 'utf-8')
+    Vocab = json.load(json_file)
+
+    return train_pos, train_neg, val_pos, val_neg, train_x, val_x, train_y, val_y, Vocab 
 
 # Stop words are messy and not that compelling; 
 # "very" and "not" are considered stop words, but they are obviously expressing sentiment

@@ -13,58 +13,7 @@ from mlflow import pyfunc
 from trax import fastmath
 # import trax.layers
 from trax import layers as tl
-train_pos, train_neg, val_pos, val_neg, train_x, val_x, train_y, val_y, Vocab = load_data()
-
-def load_data():
-    prepared_folder_path = Path("data/processed")
-    X_train_path = prepared_folder_path / "X_train.txt"
-    y_train_path = prepared_folder_path / "y_train.txt"
-    X_valid_path = prepared_folder_path / "X_valid.txt"
-    y_valid_path = prepared_folder_path / "y_valid.txt"
-    train_pos_path = prepared_folder_path / "train_pos.txt"
-    train_neg_path = prepared_folder_path / "train_neg.txt"
-    val_pos_path = prepared_folder_path / "val_pos.txt"
-    val_neg_path = prepared_folder_path / "val_neg.txt"
-    vocab_path = prepared_folder_path / "vocab.json"
-
-    train_x = open(X_train_path, encoding = 'utf-8').readlines()
-    for i in range(len(train_x)):
-        train_x[i] = train_x[i].replace('\n', '')
-
-    val_x = open(X_valid_path, encoding = 'utf-8').readlines()
-    for i in range(len(val_x)):
-        val_x[i] = val_x[i].replace('\n', '')
-
-    train_pos = open(train_pos_path, encoding = 'utf-8').readlines()
-    for i in range(len(train_pos)):
-        train_pos[i] = train_pos[i].replace('\n', '')
-
-    train_neg = open(train_neg_path, encoding = 'utf-8').readlines()
-    for i in range(len(train_neg)):
-        train_neg[i] = train_neg[i].replace('\n', '')
-
-    val_neg = open(val_neg_path, encoding = 'utf-8').readlines()
-    for i in range(len(val_neg)):
-        val_neg[i] = val_neg[i].replace('\n', '')
-
-    val_pos = open(val_pos_path, encoding = 'utf-8').readlines()
-    for i in range(len(val_pos)):
-        val_pos[i] = val_pos[i].replace('\n', '')
-
-    val_y = open(y_valid_path, encoding = 'utf-8').readlines()
-    for i in range(len(val_y)):
-        val_y[i] = float(List[i])
-    val_y = np.array(val_y)
-
-    train_y = open(y_train_path, encoding = 'utf-8').readlines()
-    for i in range(len(train_y)):
-        val_y[i] = float(List[i])
-    train_y = np.array(train_y)
-
-    json_file = open(vocab_path, 'r', encoding = 'utf-8')
-    Vocab = json.load(json_file)
-
-    return train_pos, train_neg, val_pos, val_neg, train_x, val_x, train_y, val_y, Vocab 
+train_pos, train_neg, val_pos, val_neg, train_x, val_x, train_y, val_y, Vocab = pr.preparation()
 
 print("Length train_pos: ", len(train_pos))
 print("Length train_neg: ", len(train_neg))
@@ -87,6 +36,10 @@ def train_generator(batch_size, shuffle = False):
 # Create the validation data generator
 def val_generator(batch_size, shuffle = False):
     return u.data_generator(val_pos, val_neg, batch_size, True, Vocab, shuffle)
+
+# Create the validation data generator
+def test_generator(batch_size, shuffle = False):
+    return u.data_generator(val_pos, val_neg, batch_size, False, Vocab, shuffle)
 
 # Set the random number generator for the shuffle procedure
 rnd.seed(30) 
@@ -121,7 +74,7 @@ tmp_embed = tl.Embedding(vocab_size=3, d_feature=2)
 
 tmp_model = cl.classifier(len(Vocab))
 
-batch_size = 2
+batch_size = 32
 rnd.seed(271)
 
 print("####### CHECKPOINT 3 ########")
@@ -151,56 +104,59 @@ with mlflow.start_run():
 
     print("####### CHECKPOINT 4 ########")
 
-    training_loop = u.train_model(model, train_task, eval_task, 100, output_dir)
+    steps = 100
+    training_loop = u.train_model(model, train_task, eval_task, steps, output_dir)
 
     print("####### CHECKPOINT 5 ########")
 
     #pyfunc_model = pyfunc.load_model(mlflow.get_artifact_uri("model"))
 
 
+    # ================ #
+    # MODEL EVALUATION #
+    # ================ # 
+
+    # test your function
+    tmp_val_generator = val_generator(64)
 
 
-# Create the validation data generator
-def val_generator(batch_size, shuffle = False):
-    return u.data_generator(val_pos, val_neg, batch_size, True, Vocab, shuffle)
+    # get one batch
+    tmp_batch = next(tmp_val_generator)
 
-# Create the validation data generator
-def test_generator(batch_size, shuffle = False):
-    return u.data_generator(val_pos, val_neg, batch_size, False, Vocab, shuffle)
+    # Position 0 has the model inputs (tweets as tensors)
+    # position 1 has the targets (the actual labels)
+    tmp_inputs, tmp_targets, tmp_example_weights = tmp_batch
 
+    # feed the tweet tensors into the model to get a prediction
+    tmp_pred = training_loop.eval_model(tmp_inputs)
 
-# ================ #
-# MODEL EVALUATION #
-# ================ # 
+    tmp_acc, tmp_num_correct, tmp_num_predictions = u.compute_accuracy(preds=tmp_pred, y=tmp_targets, y_weights=tmp_example_weights)
 
-# test your function
-tmp_val_generator = val_generator(64)
+    print(f"Model's prediction accuracy on a single training batch is: {100 * tmp_acc}%")
+    print(f"Weighted number of correct predictions {tmp_num_correct}; weighted number of total observations predicted {tmp_num_predictions}")
 
+    # ================ #
+    # MODEL EVALUATION IN TEST DATA#
+    # ================ # 
 
-# get one batch
-tmp_batch = next(tmp_val_generator)
+    # testing the accuracy of your model: this takes around 20 seconds
+    model = training_loop.eval_model
+    accuracy = u.test_model(test_generator(16), model)
+    print(accuracy)
+    print(f'The accuracy of your model on the validation set is {accuracy:.4f}', )
 
-# Position 0 has the model inputs (tweets as tensors)
-# position 1 has the targets (the actual labels)
-tmp_inputs, tmp_targets, tmp_example_weights = tmp_batch
+    mlflow.log_param("batch_size", batch_size)
+    mlflow.log_param("epochs", steps)
+    mlflow.log_param("training_size", len(train_x))
+    mlflow.log_param("validation_size", len(val_x))
+    #mlflow.log_param("learning_rate", learning_rate)
+    #mlflow.log_param("epochs", epochs)
+    #mlflow.log_metric("train_loss", train_loss)
+    #mlflow.log_metric("train_accuracy", train_acc)
+    #mlflow.log_metric("val_loss", val_loss)
+    mlflow.log_metric("val_accuracy", float(accuracy))
+    #mlflow.log_artifacts("./model")
 
-# feed the tweet tensors into the model to get a prediction
-tmp_pred = training_loop.eval_model(tmp_inputs)
-
-tmp_acc, tmp_num_correct, tmp_num_predictions = u.compute_accuracy(preds=tmp_pred, y=tmp_targets, y_weights=tmp_example_weights)
-
-print(f"Model's prediction accuracy on a single training batch is: {100 * tmp_acc}%")
-print(f"Weighted number of correct predictions {tmp_num_correct}; weighted number of total observations predicted {tmp_num_predictions}")
-
-# ================ #
-# MODEL EVALUATION IN TEST DATA#
-# ================ # 
-
-# testing the accuracy of your model: this takes around 20 seconds
-model = training_loop.eval_model
-accuracy = u.test_model(test_generator(16), model)
-
-print(f'The accuracy of your model on the validation set is {accuracy:.4f}', )
 
 
 # ================ #
@@ -208,15 +164,14 @@ print(f'The accuracy of your model on the validation set is {accuracy:.4f}', )
 # ================ # 
 
 # try a positive sentence
-sentence = "It's such a nice day, think i'll be taking Sid to Ramsgate fish and chips for lunch at Peter's fish factory and then the beach maybe"
-tmp_pred, tmp_sentiment = u.predict(sentence, Vocab, model)
-print(f"The sentiment of the sentence \n***\n\"{sentence}\"\n***\nis {tmp_sentiment}.")
+#sentence = "It's such a nice day, think i'll be taking Sid to Ramsgate fish and chips for lunch at Peter's fish factory and then the beach maybe"
+#tmp_pred, tmp_sentiment = u.predict(sentence, Vocab, model)
+#print(f"The sentiment of the sentence \n***\n\"{sentence}\"\n***\nis {tmp_sentiment}.")
 
-print()
 # try a negative sentence
-sentence = "I hated my day, it was the worst, I'm so sad."
-tmp_pred, tmp_sentiment = u.predict(sentence, Vocab, model)
-print(f"The sentiment of the sentence \n***\n\"{sentence}\"\n***\nis {tmp_sentiment}.")
+#sentence = "I hated my day, it was the worst, I'm so sad."
+#tmp_pred, tmp_sentiment = u.predict(sentence, Vocab, model)
+#print(f"The sentiment of the sentence \n***\n\"{sentence}\"\n***\nis {tmp_sentiment}.")
 
 '''
 # ================ #
@@ -241,4 +196,3 @@ tmp_is_positive = tmp_pred[:,1] > tmp_pred[:,0]
 for i, p in enumerate(tmp_is_positive):
     print(f"Neg log prob {tmp_pred[i,0]:.4f}\tPos log prob {tmp_pred[i,1]:.4f}\t is positive? {p}\t actual {tmp_targets[i]}")
 '''
-

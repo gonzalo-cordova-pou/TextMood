@@ -1,0 +1,15 @@
+artifact_uri: file:///home/gonzalo/Documentos/UNI/TextMood/src/mlruns/0/f8b30b5ee94b4932ac6277e0d583b5d0/artifacts
+end_time: 1664222836813
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: f8b30b5ee94b4932ac6277e0d583b5d0
+run_uuid: f8b30b5ee94b4932ac6277e0d583b5d0
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1664222787875
+status: 3
+tags: []
+user_id: gonzalo

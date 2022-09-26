@@ -37,10 +37,6 @@ def train_generator(batch_size, shuffle = False):
 def val_generator(batch_size, shuffle = False):
     return u.data_generator(val_pos, val_neg, batch_size, True, Vocab, shuffle)
 
-# Create the validation data generator
-def test_generator(batch_size, shuffle = False):
-    return u.data_generator(val_pos, val_neg, batch_size, False, Vocab, shuffle)
-
 # Set the random number generator for the shuffle procedure
 rnd.seed(30) 
 
@@ -100,10 +96,95 @@ with mlflow.start_run():
 
     output_dir = '../models/'
 
+    #mlflow.log_artifacts("./model")
+
+    print("####### CHECKPOINT 4 ########")
 
     training_loop = u.train_model(model, train_task, eval_task, 100, output_dir)
 
-    pyfunc_model = pyfunc.load_model(mlflow.get_artifact_uri("model"))
+
+    #with mlflow.start_run(run_name=run_name):
+    #    mlflow.log_param("batch_size", batch_size)
+    #    mlflow.log_param("learning_rate", learning_rate)
+    #    mlflow.log_param("epochs", epochs)
+    #    mlflow.log_metric("train_loss", train_loss)
+    #    mlflow.log_metric("train_accuracy", train_acc)
+    #    mlflow.log_metric("val_loss", val_loss)
+    #    mlflow.log_metric("val_accuracy", val_acc)
+    #    mlflow.log_artifacts("./model")
+
+    print("####### CHECKPOINT 5 ########")
+
+    #pyfunc_model = pyfunc.load_model(mlflow.get_artifact_uri("model"))
+
+
+
+import os
+import numpy as np
+import trax
+from our_model import classifier
+import utils as u
+import json
+import prepare as pr
+from trax.supervised import training
+
+# Create the validation data generator
+def val_generator(batch_size, shuffle = False):
+    return u.data_generator(val_pos, val_neg, batch_size, True, Vocab, shuffle)
+
+# Create the validation data generator
+def test_generator(batch_size, shuffle = False):
+    return u.data_generator(val_pos, val_neg, batch_size, False, Vocab, shuffle)
+
+
+# ================ #
+# MODEL EVALUATION #
+# ================ # 
+
+# test your function
+tmp_val_generator = val_generator(64)
+
+
+# get one batch
+tmp_batch = next(tmp_val_generator)
+
+# Position 0 has the model inputs (tweets as tensors)
+# position 1 has the targets (the actual labels)
+tmp_inputs, tmp_targets, tmp_example_weights = tmp_batch
+
+# feed the tweet tensors into the model to get a prediction
+tmp_pred = training_loop.eval_model(tmp_inputs)
+
+tmp_acc, tmp_num_correct, tmp_num_predictions = u.compute_accuracy(preds=tmp_pred, y=tmp_targets, y_weights=tmp_example_weights)
+
+print(f"Model's prediction accuracy on a single training batch is: {100 * tmp_acc}%")
+print(f"Weighted number of correct predictions {tmp_num_correct}; weighted number of total observations predicted {tmp_num_predictions}")
+
+# ================ #
+# MODEL EVALUATION IN TEST DATA#
+# ================ # 
+
+# testing the accuracy of your model: this takes around 20 seconds
+model = training_loop.eval_model
+accuracy = u.test_model(test_generator(16), model)
+
+print(f'The accuracy of your model on the validation set is {accuracy:.4f}', )
+
+
+# ================ #
+# MODEL EVALUATION WITH NEW DATA #
+# ================ # 
+
+# try a positive sentence
+sentence = "It's such a nice day, think i'll be taking Sid to Ramsgate fish and chips for lunch at Peter's fish factory and then the beach maybe"
+tmp_pred, tmp_sentiment = u.predict(sentence, Vocab, model)
+print(f"The sentiment of the sentence \n***\n\"{sentence}\"\n***\nis {tmp_sentiment}.")
+
+print()
+# try a negative sentence
+sentence = "I hated my day, it was the worst, I'm so sad."
+tmp_pred, tmp_sentiment = u.predict(sentence, Vocab, model)
+print(f"The sentiment of the sentence \n***\n\"{sentence}\"\n***\nis {tmp_sentiment}.")
 
 '''
 # ================ #

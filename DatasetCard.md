@@ -44,7 +44,7 @@ The sentiment140 dataset contains 1,600,000 tweets extracted using the twitter a
 
 ### Supported Tasks and Leaderboards
 
-* `twitter-sentiment-analysis` The dataset can be used to train a model to predict user sentiment, which consists in detecting the mood of the users from the tweets they wrote. Success on this is typically measured by achieving high accuracy. The model currently achieves the following accuracy score: 0.791134375.
+* `twitter-sentiment-analysis` The dataset can be used to train a model to predict user sentiment, which consists in detecting the mood of the users from the tweets they wrote. Success on this is typically measured by achieving high accuracy. For example, we have found a [model](https://www.kaggle.com/code/paoloripamonti/twitter-sentiment-analysis) that currently achieves the following accuracy score: 0.791134375.
 
 ### Languages
 

@@ -44,7 +44,7 @@ The sentiment140 dataset contains 1,600,000 tweets extracted using the twitter a
 
 ### Supported Tasks and Leaderboards
 
-* `twitter-sentiment-analysis` The dataset can be used to train a model to predict user sentiment, which consists in detecting the mood of the users from the tweets they wrote. Success on this is typically measured by achieving high accuracy. The model currently achieves the following score: 0.791134375.
+* `twitter-sentiment-analysis` The dataset can be used to train a model to predict user sentiment, which consists in detecting the mood of the users from the tweets they wrote. Success on this is typically measured by achieving high accuracy. The model currently achieves the following accuracy score: 0.791134375.
 
 ### Languages
 
@@ -85,5 +85,5 @@ The data is not split, so the user is expected to do it in order to train and te
 
 #### Initial Data Collection and annotation
 
-Dataset creators highlight that approach was unique because the training data was automatically created, as opposed to having humans manual annotate tweets. They we assume that any tweet with positive emoticons, like :), were positive, and tweets with negative emoticons, like :(, were negative. They used the Twitter Search API to collect these tweets by using keyword search.
+Dataset creators highlight that their approach was unique because the training data was automatically created, as opposed to having humans manual annotate tweets. They we assume that any tweet with positive emoticons, like :), were positive, and tweets with negative emoticons, like :(, were negative. They used the Twitter Search API to collect these tweets by using keyword search.
 

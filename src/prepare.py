@@ -45,7 +45,7 @@ def process_tweet(tweet):
     
     return clean_tweet
 
-data_path = dvc.api.get_url('training.1600000.processed.noemoticon.csv')
+data_path = dvc.api.get_url('data/raw/training.1600000.processed.noemoticon.csv')
 
     # Reading the dataset with no columns titles and with latin encoding 
 df = pd.read_csv(data_path, sep = ",", encoding='latin-1', header=None, error_bad_lines=False)

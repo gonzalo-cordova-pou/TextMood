@@ -14,7 +14,7 @@ The directory structure of our project:
 │   └── utils.py           
 ├── static                 <- Provisional static files
 │   └── nn.jpg
-├── DatasetCard.md         <- Directory structure of our project
+├── DatasetCard.md         <- Dataset information
 ├── ProjectStructure.md    <- Directory structure of our project
 ├── README.md              <- The top-level README following a model card format
 ├── requirements.txt       <- Requirements file for reproducing the analysis environment

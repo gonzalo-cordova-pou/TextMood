@@ -54,7 +54,7 @@ results on test data:
 * Same dataset: Sentiment140 dataset with 1.6 million tweets https://www.kaggle.com/datasets/kazanova/sentiment140 (20% remaining used for testing)
 * The same preprocessing steps are applied as we use the same dataset
 ### Quantitative analyses
-*![Results](./static/quantitative_analysis.png)
+![Results](./static/quantitative_analysis.png)
 ### Ethical considerations
 * TextMood team follows values such as transparency, privacy, non-discrimination and societal and environmental wellbeing
 * As previosuly stated, this model cannot be used for gaining personal or commercial profit by knowing users' mood.

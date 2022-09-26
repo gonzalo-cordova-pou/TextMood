@@ -24,7 +24,6 @@ task_ids:
 # Dataset Card for Sentiment140
 
 ## Table of Contents
-- [Table of Contents](#table-of-contents)
 - [Dataset Description](#dataset-description)
   - [Dataset Summary](#dataset-summary)
   - [Supported Tasks and Leaderboards](#supported-tasks-and-leaderboards)
@@ -34,20 +33,7 @@ task_ids:
   - [Data Fields](#data-fields)
   - [Data Splits](#data-splits)
 - [Dataset Creation](#dataset-creation)
-  - [Curation Rationale](#curation-rationale)
-  - [Source Data](#source-data)
-  - [Annotations](#annotations)
-  - [Personal and Sensitive Information](#personal-and-sensitive-information)
-- [Considerations for Using the Data](#considerations-for-using-the-data)
-  - [Social Impact of Dataset](#social-impact-of-dataset)
-  - [Discussion of Biases](#discussion-of-biases)
-  - [Other Known Limitations](#other-known-limitations)
-- [Additional Information](#additional-information)
-  - [Dataset Curators](#dataset-curators)
-  - [Licensing Information](#licensing-information)
-  - [Citation Information](#citation-information)
-  - [Contributions](#contributions)
-
+  - [Initial Data Collection and annotation](#Initial-Data-Collection-and-annotation)
 ## Dataset Description
 
 - **Homepage:** [Sentiment140](https://www.kaggle.com/datasets/kazanova/sentiment140)
@@ -97,62 +83,5 @@ The data is not split, so the user is expected to do it in order to train and te
 
 ## Dataset Creation
 
-### Curation Rationale
+#### Initial Data Collection and annotation
 
-[More Information Needed]
-
-### Source Data
-
-#### Initial Data Collection and Normalization
-
-[More Information Needed]
-
-#### Who are the source language producers?
-
-[More Information Needed]
-
-### Annotations
-
-#### Annotation process
-
-[More Information Needed]
-
-#### Who are the annotators?
-
-[More Information Needed]
-
-### Personal and Sensitive Information
-
-[More Information Needed]
-
-## Considerations for Using the Data
-
-### Social Impact of Dataset
-
-[More Information Needed]
-
-### Discussion of Biases
-
-[More Information Needed]
-
-### Other Known Limitations
-
-[More Information Needed]
-
-## Additional Information
-
-### Dataset Curators
-
-[More Information Needed]
-
-### Licensing Information
-
-[More Information Needed]
-
-### Citation Information
-
-[More Information Needed]
-
-### Contributions
-
-Thanks to [@github-username](https://github.com/<github-username>) for adding this dataset.

@@ -45,11 +45,10 @@ def process_tweet(tweet):
     
     return clean_tweet
 
-input_folder_path = Path("data/raw")
-train_path = input_folder_path / "training.1600000.processed.noemoticon.csv"
+data_path = dvc.api.get_url('training.1600000.processed.noemoticon.csv')
 
     # Reading the dataset with no columns titles and with latin encoding 
-df = pd.read_csv(train_path, sep = ",", encoding='latin-1', header=None, error_bad_lines=False)
+df = pd.read_csv(data_path, sep = ",", encoding='latin-1', header=None, error_bad_lines=False)
 
 # As the data has no column titles, we will add our own
 df.columns = ["label", "time", "date", "query", "username", "text"]

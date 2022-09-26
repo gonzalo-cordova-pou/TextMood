@@ -1,12 +1,21 @@
-The directory structure of y¡our new project looks like this: 
+The directory structure of our project: 
 
 ```
-├── static             <- Provisional static files
-├── .gitignore         <- 
-├── data               <- 
-├── models             <- Trained models
-├── DatasetCard.md     <- Dataset information 
-├── README.md          <- Project information displayed using a Model Card format
-├── requirements.txt   <- 
-├── utils.py           <- Trained models
+├── data
+│   └── raw
+│       └── training.1600000.processed.noemoticon.csv.dvc
+├── src                  <- Source code for use in this project 
+│   ├── evaluate.py      <- Script for model prediction and model evaluation
+│   ├── our_model.py     <- Script to define our classifier
+│   ├── prepare.py       <- Script for data ingestion and data preparation
+│   ├── train.py         <- Script for training setup and model training 
+│   ├── trax_models.py
+│   └── utils.py
+├── static
+│   └── nn.jpg
+├── DatasetCard.md       <- Detailed information about the dataset used in this project
+├── ProjectStructure.md  <- Directory structure of our project
+├── README.md            <- The top-level README following a model card format
+└── requirements.txt     <- Requirements file for reproducing the analysis environment
+
 ```

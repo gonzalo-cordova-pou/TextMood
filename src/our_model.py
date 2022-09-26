@@ -1,6 +1,7 @@
 import trax_models
+from trax import layers as tl
 
-def classifier(vocab_size=len(Vocab), embedding_dim=256, output_dim=2, mode='train'):
+def classifier(vocab_size, embedding_dim=256, output_dim=2, mode='train'):
     
     # create embedding layer
     embed_layer = tl.Embedding(

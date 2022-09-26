@@ -11,6 +11,9 @@ datasets:
 metrics:
 - Accuracy
 - Cross entropy loss
+results on test data:
+- Accuracy = 0.688
+- Cross entropy loss = 0.491
 ---
 # TextMood Model Card
 
@@ -30,7 +33,7 @@ metrics:
 * In particular, detection of users' mood classifying it as positive or negative by simply reading their tweets
 * Developed by the TextMood team in the context of TAED II course
 * Model date: September 2022
-* Model version: 2.0
+* Model version: 3.0
 * Send questions or comments about the model to textmoodupc@gmail.com
 
 ![Model architecture](./static/nn.jpg)

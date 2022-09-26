@@ -5,13 +5,13 @@ The directory structure of our project:
 │   └── raw
 │       └── training.1600000.processed.noemoticon.csv.dvc
 ├── models
-├── src                    <- Soure code and MLflow
+├── src                    <- Source code and MLflow
 │   ├── mlruns             <- Experiment tracking
 │   ├── our_model.py       <- Classifier
 │   ├── prepare.py         <- Tweets and vocabulary processing
 │   ├── train_and_eval.py  <- Model training and evaluation
 │   ├── trax_models.py     <- Layers definition
-│   └── utils.py           
+│   └── utils.py           <- More processing and training functions
 ├── static                 <- Provisional static files
 │   └── nn.jpg
 ├── DatasetCard.md         <- Dataset information
@@ -19,7 +19,4 @@ The directory structure of our project:
 ├── README.md              <- The top-level README following a model card format
 ├── requirements.txt       <- Requirements file for reproducing the analysis environment
 └── Untitled.ipynb         <- Tweets processing
-
-
-
 ```

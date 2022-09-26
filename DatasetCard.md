@@ -84,7 +84,7 @@ A typical data point comprises a `text`, which is the content of the tweet, with
 
 ### Data Fields
 
-* `target`: the polarity of the tweet (0 = negative, 2 = neutral, 4 = positive).
+* `target`: the polarity of the tweet (0 = negative, 4 = positive).
 * `ids`: The id of the tweet (2087).
 * `date`: the date of the tweet (Sat May 16 23:58:44 UTC 2009).
 * `flag`: The query (lyx). If there is no query, then this value is NO_QUERY.

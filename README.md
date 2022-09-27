@@ -54,6 +54,17 @@ results on test data:
 * Same dataset: Sentiment140 dataset with 1.6 million tweets https://www.kaggle.com/datasets/kazanova/sentiment140 (20% remaining used for testing)
 * The same preprocessing steps are applied as we use the same dataset
 ### Quantitative analyses
+
+We executed three different versions of our model and we tracked their results using
+MLflow. As we can see, we used three combinations of the parameters batch_size and epochs
+(32-100, 32-50 and 16-50) and compared the accuracy and the cross entropy loss values
+obtained on test data.
+
+We selected the second model (batch_size = 32 and epochs = 50) as the best one, as it has the
+highest accuracy value (the third too) and the lowest cross entropy loss value. Naturally, we
+are open to improving these models with new techniques during the next few weeks, tracking
+their results and updating them.
+
 ![Results](./static/quantitative_analysis.png)
 ### Ethical considerations
 * TextMood team follows values such as transparency, privacy, non-discrimination and societal and environmental wellbeing

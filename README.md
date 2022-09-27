@@ -11,6 +11,9 @@ datasets:
 metrics:
 - Accuracy
 - Cross entropy loss
+results on test data:
+- Accuracy = 0.688
+- Cross entropy loss = 0.491
 ---
 # TextMood Model Card
 
@@ -30,7 +33,7 @@ metrics:
 * In particular, detection of users' mood classifying it as positive or negative by simply reading their tweets
 * Developed by the TextMood team in the context of TAED II course
 * Model date: September 2022
-* Model version: 2.0
+* Model version: 3.0
 * Send questions or comments about the model to textmoodupc@gmail.com
 
 ![Model architecture](./static/nn.jpg)
@@ -51,7 +54,18 @@ metrics:
 * Same dataset: Sentiment140 dataset with 1.6 million tweets https://www.kaggle.com/datasets/kazanova/sentiment140 (20% remaining used for testing)
 * The same preprocessing steps are applied as we use the same dataset
 ### Quantitative analyses
-*
+
+We executed three different versions of our model and we tracked their results using
+MLflow. As we can see, we used three combinations of the parameters batch_size and epochs
+(32-100, 32-50 and 16-50) and compared the accuracy and the cross entropy loss values
+obtained on test data.
+
+We selected the second model (batch_size = 32 and epochs = 50) as the best one, as it has the
+highest accuracy value (the third too) and the lowest cross entropy loss value. Naturally, we
+are open to improving these models with new techniques during the next few weeks, tracking
+their results and updating them.
+
+![Results](./static/quantitative_analysis.png)
 ### Ethical considerations
 * TextMood team follows values such as transparency, privacy, non-discrimination and societal and environmental wellbeing
 * As previosuly stated, this model cannot be used for gaining personal or commercial profit by knowing users' mood.

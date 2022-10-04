@@ -19,12 +19,12 @@ def preparation():
     # ================ #
 
     # Split positive set into validation and training
-    val_pos   = all_positive_tweets[40000:80000] # generating validation set for positive tweets
-    train_pos  = all_positive_tweets[:40000]# generating training set for positive tweets
+    val_pos   = all_positive_tweets[80000:160000] # generating validation set for positive tweets
+    train_pos  = all_positive_tweets[:80000]# generating training set for positive tweets
 
     # Split negative set into validation and training
-    val_neg   = all_negative_tweets[40000:80000] # generating validation set for negative tweets
-    train_neg  = all_negative_tweets[:40000] # generating training set for nagative tweets
+    val_neg   = all_negative_tweets[80000:160000] # generating validation set for negative tweets
+    train_neg  = all_negative_tweets[:80000] # generating training set for nagative tweets
 
     # Delete all_positive_tweets and all_negative_tweets from memory
     del all_positive_tweets

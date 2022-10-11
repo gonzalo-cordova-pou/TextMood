@@ -4,16 +4,27 @@ import os
 import numpy as np
 import trax
 from trax.supervised import training
+from comet_ml import Experiment
 import json
 import mlflow
 import pandas as pd
 import our_model as cl
 import prepare as pr
+import comet_ml
 from mlflow import pyfunc
 from trax import fastmath
 # import trax.layers
 from trax import layers as tl
+from codecarbon import EmissionsTracker
+
+experiment = Experiment(api_key="0mrbguygGOIO4Gs0ocFddjomE")
+tracker=EmissionsTracker()
+tracker.start()
 train_pos, train_neg, val_pos, val_neg, train_x, val_x, train_y, val_y, Vocab = pr.preparation()
+
+# Save Vocab to file
+with open('Vocab.json', 'w') as fp:
+    json.dump(Vocab, fp)
 
 print("Length train_pos: ", len(train_pos))
 print("Length train_neg: ", len(train_neg))
@@ -42,7 +53,7 @@ def test_generator(batch_size, shuffle = False):
     return u.data_generator(val_pos, val_neg, batch_size, False, Vocab, shuffle)
 
 # Set the random number generator for the shuffle procedure
-rnd.seed(30) 
+rnd.seed(30)
 
 print("####### CHECKPOINT 1 ########")
 # Get a batch from the train_generator and inspect.
@@ -70,7 +81,7 @@ tmp_embed = tl.Embedding(vocab_size=3, d_feature=2)
 
 # ================ #
 # MODEL TRAINING #
-# ================ # 
+# ================ #
 
 tmp_model = cl.classifier(len(Vocab))
 
@@ -81,12 +92,25 @@ print("####### CHECKPOINT 3 ########")
 
 mlflow.tensorflow.autolog()
 
-with mlflow.start_run():
+with mlflow.start_run() as run:
+
+    output_dir = '../models/{}/'.format(run.info.run_id)
+
+
+    # Choose an optimizer and log it to mlflow
+    lr = 0.01
+    optimizer_name = "Adam" # choices are "Adam", "SGD"
+    if optimizer_name == "SGD":
+        optimizer = trax.optimizers.SGD(learning_rate=lr)
+    else:
+        optimizer = trax.optimizers.Adam(learning_rate=lr)
+    mlflow.log_param("optimizer", optimizer_name)
+
 
     train_task = training.TrainTask(
         labeled_data=train_generator(batch_size=batch_size, shuffle=True),
         loss_layer=tl.CrossEntropyLoss(),
-        optimizer=trax.optimizers.Adam(0.01),
+        optimizer=optimizer,
         n_steps_per_checkpoint=10,
     )
 
@@ -97,24 +121,17 @@ with mlflow.start_run():
 
     model = cl.classifier(len(Vocab))
 
-
-    output_dir = '../models/'
-
-    #mlflow.log_artifacts("./model")
-
     print("####### CHECKPOINT 4 ########")
 
     steps = 100
     training_loop = u.train_model(model, train_task, eval_task, steps, output_dir)
+    training_loop.save_checkpoint('CHECKP_' + run.info.run_id)
 
     print("####### CHECKPOINT 5 ########")
 
-    #pyfunc_model = pyfunc.load_model(mlflow.get_artifact_uri("model"))
-
-
     # ================ #
     # MODEL EVALUATION #
-    # ================ # 
+    # ================ #
 
     # test your function
     tmp_val_generator = val_generator(64)
@@ -137,10 +154,12 @@ with mlflow.start_run():
 
     # ================ #
     # MODEL EVALUATION IN TEST DATA#
-    # ================ # 
+    # ================ #
 
     # testing the accuracy of your model: this takes around 20 seconds
     model = training_loop.eval_model
+
+
     accuracy = u.test_model(test_generator(16), model)
     print(accuracy)
     print(f'The accuracy of your model on the validation set is {accuracy:.4f}', )
@@ -149,50 +168,14 @@ with mlflow.start_run():
     mlflow.log_param("epochs", steps)
     mlflow.log_param("training_size", len(train_x))
     mlflow.log_param("validation_size", len(val_x))
-    #mlflow.log_param("learning_rate", learning_rate)
-    #mlflow.log_param("epochs", epochs)
+    mlflow.log_metric("val_accuracy", float(accuracy))
+    mlflow.log_artifacts("../models")
     #mlflow.log_metric("train_loss", train_loss)
     #mlflow.log_metric("train_accuracy", train_acc)
     #mlflow.log_metric("val_loss", val_loss)
-    mlflow.log_metric("val_accuracy", float(accuracy))
     #mlflow.log_artifacts("./model")
 
+    emissions: float = tracker.stop()
+    print("Emissions: ", emissions)
 
-
-# ================ #
-# MODEL EVALUATION WITH NEW DATA #
-# ================ # 
-
-# try a positive sentence
-#sentence = "It's such a nice day, think i'll be taking Sid to Ramsgate fish and chips for lunch at Peter's fish factory and then the beach maybe"
-#tmp_pred, tmp_sentiment = u.predict(sentence, Vocab, model)
-#print(f"The sentiment of the sentence \n***\n\"{sentence}\"\n***\nis {tmp_sentiment}.")
-
-# try a negative sentence
-#sentence = "I hated my day, it was the worst, I'm so sad."
-#tmp_pred, tmp_sentiment = u.predict(sentence, Vocab, model)
-#print(f"The sentiment of the sentence \n***\n\"{sentence}\"\n***\nis {tmp_sentiment}.")
-
-'''
-# ================ #
-# MODEL PREDICTION #
-# ================ # 
-
-# Create a generator object
-tmp_train_generator = train_generator(16)
-
-# get one batch
-tmp_batch = next(tmp_train_generator)
-
-# Position 0 has the model inputs (tweets as tensors)
-# position 1 has the targets (the actual labels)
-tmp_inputs, tmp_targets, tmp_example_weights = tmp_batch
-
-# feed the tweet tensors into the model to get a prediction
-tmp_pred = training_loop.eval_model(tmp_inputs)
-
-# turn probabilites into category predictions
-tmp_is_positive = tmp_pred[:,1] > tmp_pred[:,0]
-for i, p in enumerate(tmp_is_positive):
-    print(f"Neg log prob {tmp_pred[i,0]:.4f}\tPos log prob {tmp_pred[i,1]:.4f}\t is positive? {p}\t actual {tmp_targets[i]}")
-'''
+    mlflow.end_run()

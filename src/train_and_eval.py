@@ -14,14 +14,17 @@ import utils as u
 from trax import layers as tl
 
 NAME = 'model_0'
-training_batch_size = 64
-validation_batch_size = 64
-steps = 200
-size = 20000 #1000000
-training_percentage = 0.8
-output_dir = './models/{}/'.format(NAME)
+TRAINING_BATCH_SIZE = 64
+VALIDATION_BATCH_SIZE = 64
+STEPS = 200
+SIZE = 20000 #1000000
+TRAINING_PERCENTAGE = 0.8
+# pylint: disable=consider-using-f-string
+OUTPUT_DIR = './models/{}/'.format(NAME)
 
-train_pos, train_neg, val_pos, val_neg, train_x, val_x, train_y, val_y, Vocab = pr.preparation(size, training_percentage)
+
+[train_pos, train_neg, val_pos, val_neg, train_x,
+val_x, train_y, val_y, Vocab] = pr.preparation(SIZE, TRAINING_PERCENTAGE)
 
 
 print("Length train_pos: ", len(train_pos))
@@ -38,16 +41,17 @@ print("Length Vocab: ", len(Vocab))
 # TRAINING SETUP #
 # ================ #
 
-# Create the training data generator
+
 def train_generator(batch_size, shuffle = False):
+    '''Create the training data generator'''
     return u.data_generator(train_pos, train_neg, batch_size, True, Vocab, shuffle)
 
-# Create the validation data generator
 def val_generator(batch_size, shuffle = False):
+    '''Create the validation data generator'''
     return u.data_generator(val_pos, val_neg, batch_size, True, Vocab, shuffle)
 
-# Create the validation data generator
 def test_generator(batch_size, shuffle = False):
+    '''Create the validation data generator'''
     return u.data_generator(val_pos, val_neg, batch_size, False, Vocab, shuffle)
 
 # Set the random number generator for the shuffle procedure
@@ -92,11 +96,11 @@ mlflow.tensorflow.autolog()
 with mlflow.start_run(run_name=NAME) as run:
 
     # create directory for model
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    if not os.path.exists(OUTPUT_DIR):
+        os.makedirs(OUTPUT_DIR)
 
     # Save Vocab to file
-    with open(output_dir+'Vocab.json', 'w', encoding="utf-8") as fp:
+    with open(OUTPUT_DIR+'Vocab.json', 'w', encoding="utf-8") as fp:
         json.dump(Vocab, fp)
 
     # Choose an optimizer and log it to mlflow
@@ -110,14 +114,14 @@ with mlflow.start_run(run_name=NAME) as run:
 
 
     train_task = training.TrainTask(
-        labeled_data=train_generator(batch_size=training_batch_size, shuffle=True),
+        labeled_data=train_generator(batch_size=TRAINING_BATCH_SIZE, shuffle=True),
         loss_layer=tl.CrossEntropyLoss(),
         optimizer=optimizer,
         n_steps_per_checkpoint=10,
     )
 
     eval_task = training.EvalTask(
-        labeled_data=val_generator(batch_size=validation_batch_size, shuffle=True),
+        labeled_data=val_generator(batch_size=VALIDATION_BATCH_SIZE, shuffle=True),
         metrics=[tl.CrossEntropyLoss(), tl.Accuracy()],
     )
 
@@ -125,7 +129,7 @@ with mlflow.start_run(run_name=NAME) as run:
 
     print("####### CHECKPOINT 4 ########")
 
-    training_loop = u.train_model(model, train_task, eval_task, steps, output_dir)
+    training_loop = u.train_model(model, train_task, eval_task, STEPS, OUTPUT_DIR)
     training_loop.save_checkpoint('checkpoint')
 
     print("####### CHECKPOINT 5 ########")
@@ -165,12 +169,12 @@ with mlflow.start_run(run_name=NAME) as run:
     print(accuracy)
     print(f'The accuracy of your model on the validation set is {accuracy:.4f}', )
 
-    mlflow.log_param("training_batch_size", training_batch_size)
-    mlflow.log_param("validation_batch_size", validation_batch_size)
-    mlflow.log_param("steps", steps)
+    mlflow.log_param("TRAINING_BATCH_SIZE", TRAINING_BATCH_SIZE)
+    mlflow.log_param("VALIDATION_BATCH_SIZE", VALIDATION_BATCH_SIZE)
+    mlflow.log_param("STEPS", STEPS)
     mlflow.log_param("training_size", len(train_x))
     mlflow.log_param("validation_size", len(val_x))
-    mlflow.log_param("training_percent", training_percentage)
+    mlflow.log_param("training_percent", TRAINING_PERCENTAGE)
     mlflow.log_metric("val_accuracy", float(accuracy))
     mlflow.log_artifacts("./models")
     #mlflow.log_metric("train_loss", train_loss)

@@ -12,7 +12,7 @@ class TextMoodModel():
 
         
         self.name = model_name
-        self.directory = './models/{}/'.format(model_name)
+        self.directory = '../models/{}/'.format(model_name)
         
         print("Loading vocab...")
         try:

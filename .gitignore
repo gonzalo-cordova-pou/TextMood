@@ -4,6 +4,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,visualstudiocode,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,visualstudiocode,python
 
+./models
+./mlruns
+
 ### macOS ###
 # General
 .DS_Store
@@ -12,6 +15,9 @@
 
 # Icon must end with two \r
 Icon
+
+#VSCode
+.vscode
 
 
 # Thumbnails
@@ -225,3 +231,5 @@ cython_debug/
 *.code-workspace
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,visualstudiocode,python
+/models
+/mlruns

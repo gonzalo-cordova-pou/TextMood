@@ -1,22 +1,20 @@
-import utils as u
 import random as rnd
 import os
-import numpy as np
 import trax
 from trax.supervised import training
 from comet_ml import Experiment
 import json
 import mlflow
-import pandas as pd
 import our_model as cl
 import prepare as pr
 import comet_ml
 from mlflow import pyfunc
 from trax import fastmath
 import tensorflow as tf
-# import trax.layers
 from trax import layers as tl
 from codecarbon import EmissionsTracker
+import utils as u
+# import trax.layers
 
 NAME = 'model_0'
 training_batch_size = 64
@@ -86,9 +84,9 @@ print("Weight matrix generated with a normal distribution with mean 0 and stdev 
 tmp_embed = tl.Embedding(vocab_size=3, d_feature=2)
 #display(tmp_embed)
 
-# ================ #
+# ================
 # MODEL TRAINING #
-# ================ #
+# ================
 
 tmp_model = cl.classifier(len(Vocab))
 
@@ -105,18 +103,17 @@ with mlflow.start_run(run_name=NAME) as run:
         os.makedirs(output_dir)
 
     # Save Vocab to file
-    with open(output_dir+'Vocab.json', 'w') as fp:
+    with open(output_dir+'Vocab.json', 'w', encoding="utf-8") as fp:
         json.dump(Vocab, fp)
 
-
     # Choose an optimizer and log it to mlflow
-    lr = 0.01
-    optimizer_name = "Adam" # choices are "Adam", "SGD"
-    if optimizer_name == "SGD":
-        optimizer = trax.optimizers.SGD(learning_rate=lr)
+    LR = 0.01
+    OPT = "Adam" # choices are "Adam", "SGD"
+    if OPT == "SGD":
+        optimizer = trax.optimizers.SGD(learning_rate=LR)
     else:
-        optimizer = trax.optimizers.Adam(learning_rate=lr)
-    mlflow.log_param("optimizer", optimizer_name)
+        optimizer = trax.optimizers.Adam(learning_rate=LR)
+    mlflow.log_param("optimizer", OPT)
 
 
     train_task = training.TrainTask(
@@ -169,7 +166,6 @@ with mlflow.start_run(run_name=NAME) as run:
 
     # testing the accuracy of your model: this takes around 20 seconds
     model = training_loop.eval_model
-
 
     accuracy = u.test_model(test_generator(16), model)
     print(accuracy)

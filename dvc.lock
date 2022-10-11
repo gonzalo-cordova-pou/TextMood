@@ -1,0 +1,20 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: python src/train_and_eval.py
+    deps:
+    - path: data/training.1600000.processed.noemoticon.csv
+      md5: df952449d6f9b5f9fdfe3fc53ddef7ca
+      size: 238803811
+    - path: src/train_and_eval.py
+      md5: daa081e9637818838d06a42989012711
+      size: 5746
+    outs:
+    - path: ./mlruns/
+      md5: 49021b8702d513bec4bbd5d08da3596d.dir
+      size: 65177816
+      nfiles: 33
+    - path: ./models
+      md5: 79b9680a322f7f116d0867270e23b157.dir
+      size: 65171159
+      nfiles: 11

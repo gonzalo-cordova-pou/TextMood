@@ -19,31 +19,30 @@ with open('Vocab.json', 'r') as fp:
 # this is used to predict on your own sentnece
 def predict(sentence):
     inputs = np.array(u.tweet2tensor(sentence, vocab_dict=Vocab))
-    
     # Batch size 1, add dimension for batch, to work with the model
-    inputs = inputs[None, :]  
-    
+
+    inputs = inputs[None, :]
+
     # predict with the model
     preds_probs = model(inputs)
-    
+
     # Turn probabilities into categories
     preds = int(preds_probs[0, 1] > preds_probs[0, 0])
-    
+
     sentiment = "negative"
     if preds == 1:
         sentiment = 'positive'
-        
     return preds, sentiment
 
 print("Loadin model architecture...")
 # Load the model architecture
 model = cl.classifier(len(Vocab))
 
-output_dir = './models/{}/'.format(choose_version)
+OUTPUT_DIR = './models/{}/'.format(choose_version)
 
 # Initialize using pre-trained weights
 print("Initializing model...")
-model.init_from_file(output_dir + 'checkpoint.pkl.gz'.format(choose_version), weights_only=True)
+model.init_from_file(OUTPUT_DIR + 'checkpoint.pkl.gz'.format(choose_version), weights_only=True)
 
 # try a positive sentence
 print("Testing model...")

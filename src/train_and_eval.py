@@ -1,24 +1,22 @@
-import utils as u
 import random as rnd
 import os
-import numpy as np
 import trax
 from trax.supervised import training
 import json
 import mlflow
-import pandas as pd
 import our_model as cl
 import prepare as pr
 from mlflow import pyfunc
 from trax import fastmath
 import tensorflow as tf
+import utils as u
 # import trax.layers
 from trax import layers as tl
 
 NAME = 'model_0'
 training_batch_size = 64
 validation_batch_size = 64
-steps = 200 
+steps = 200
 size = 20000 #1000000
 training_percentage = 0.8
 output_dir = './models/{}/'.format(NAME)
@@ -53,7 +51,7 @@ def test_generator(batch_size, shuffle = False):
     return u.data_generator(val_pos, val_neg, batch_size, False, Vocab, shuffle)
 
 # Set the random number generator for the shuffle procedure
-rnd.seed(30) 
+rnd.seed(30)
 
 print("####### CHECKPOINT 1 ########")
 # Get a batch from the train_generator and inspect.
@@ -79,9 +77,9 @@ print("Weight matrix generated with a normal distribution with mean 0 and stdev 
 tmp_embed = tl.Embedding(vocab_size=3, d_feature=2)
 #display(tmp_embed)
 
-# ================ #
+# ================
 # MODEL TRAINING #
-# ================ # 
+# ================
 
 tmp_model = cl.classifier(len(Vocab))
 
@@ -98,18 +96,17 @@ with mlflow.start_run(run_name=NAME) as run:
         os.makedirs(output_dir)
 
     # Save Vocab to file
-    with open(output_dir+'Vocab.json', 'w') as fp:
+    with open(output_dir+'Vocab.json', 'w', encoding="utf-8") as fp:
         json.dump(Vocab, fp)
 
-
     # Choose an optimizer and log it to mlflow
-    lr = 0.01
-    optimizer_name = "Adam" # choices are "Adam", "SGD"    
-    if optimizer_name == "SGD":
-        optimizer = trax.optimizers.SGD(learning_rate=lr)
+    LR = 0.01
+    OPT = "Adam" # choices are "Adam", "SGD"
+    if OPT == "SGD":
+        optimizer = trax.optimizers.SGD(learning_rate=LR)
     else:
-        optimizer = trax.optimizers.Adam(learning_rate=lr)
-    mlflow.log_param("optimizer", optimizer_name)
+        optimizer = trax.optimizers.Adam(learning_rate=LR)
+    mlflow.log_param("optimizer", OPT)
 
 
     train_task = training.TrainTask(
@@ -135,7 +132,7 @@ with mlflow.start_run(run_name=NAME) as run:
 
     # ================ #
     # MODEL EVALUATION #
-    # ================ # 
+    # ================ #
 
     # test your function
     tmp_val_generator = val_generator(64)
@@ -158,7 +155,7 @@ with mlflow.start_run(run_name=NAME) as run:
 
     # ================ #
     # MODEL EVALUATION IN TEST DATA#
-    # ================ # 
+    # ================ #
 
     # testing the accuracy of your model: this takes around 20 seconds
     model = training_loop.eval_model

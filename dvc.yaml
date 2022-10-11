@@ -1,0 +1,9 @@
+stages:
+  train:
+    cmd: python src/train_and_eval.py
+    deps:
+    - data/training.1600000.processed.noemoticon.csv
+    - src/train_and_eval.py
+    outs:
+    - ./mlruns/
+    - ./models

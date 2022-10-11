@@ -8,6 +8,9 @@ import numpy as np
 import our_model as cl
 import json
 
+# Choose the model version
+choose_version = 'model_0'
+
 # Load Vocab
 print("Loadin vocab...")
 with open('Vocab.json', 'r') as fp:
@@ -36,10 +39,7 @@ print("Loadin model architecture...")
 # Load the model architecture
 model = cl.classifier(len(Vocab))
 
-# Choose the model version
-choose_version = 'f5500509df964d33aa01b049aae946e0'
-
-output_dir = '../models/{}/'.format(choose_version)
+output_dir = './models/{}/'.format(choose_version)
 
 # Initialize using pre-trained weights
 print("Initializing model...")

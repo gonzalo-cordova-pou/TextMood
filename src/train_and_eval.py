@@ -2,16 +2,19 @@ import random as rnd
 import os
 import trax
 from trax.supervised import training
+from comet_ml import Experiment
 import json
 import mlflow
 import our_model as cl
 import prepare as pr
+import comet_ml
 from mlflow import pyfunc
 from trax import fastmath
 import tensorflow as tf
+from trax import layers as tl
+from codecarbon import EmissionsTracker
 import utils as u
 # import trax.layers
-from trax import layers as tl
 
 NAME = 'model_0'
 TRAINING_BATCH_SIZE = 64
@@ -22,10 +25,12 @@ TRAINING_PERCENTAGE = 0.8
 # pylint: disable=consider-using-f-string
 OUTPUT_DIR = './models/{}/'.format(NAME)
 
+experiment = Experiment(api_key="0mrbguygGOIO4Gs0ocFddjomE")
+tracker=EmissionsTracker()
+tracker.start()
 
 [train_pos, train_neg, val_pos, val_neg, train_x,
 val_x, train_y, val_y, Vocab] = pr.preparation(SIZE, TRAINING_PERCENTAGE)
-
 
 print("Length train_pos: ", len(train_pos))
 print("Length train_neg: ", len(train_neg))
@@ -163,8 +168,7 @@ with mlflow.start_run(run_name=NAME) as run:
 
     # testing the accuracy of your model: this takes around 20 seconds
     model = training_loop.eval_model
-    
-    
+
     accuracy = u.test_model(test_generator(16), model)
     print(accuracy)
     print(f'The accuracy of your model on the validation set is {accuracy:.4f}', )
@@ -182,6 +186,7 @@ with mlflow.start_run(run_name=NAME) as run:
     #mlflow.log_metric("val_loss", val_loss)
     #mlflow.log_artifacts("./model")
 
+    emissions: float = tracker.stop()
+    print("Emissions: ", emissions)
+
     mlflow.end_run()
-
-

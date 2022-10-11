@@ -5,26 +5,28 @@ import pandas as pd
 import numpy as np
 
 
-def preparation():
+def preparation(size=10000, percent = 0.5):
     # ================ #
     # DATA INGESTION #
     # ================ #
 
     # Load positive and negative tweets
-    all_positive_tweets, all_negative_tweets = u.provisional_load_tweets()
+    all_positive_tweets, all_negative_tweets = u.provisional_load_tweets(size)
 
 
     # ================ #
     # DATA PREPARATION #
     # ================ #
 
+    i1 = int(percent*int(size/2))
+
     # Split positive set into validation and training
-    val_pos   = all_positive_tweets[80000:160000] # generating validation set for positive tweets
-    train_pos  = all_positive_tweets[:80000]# generating training set for positive tweets
+    val_pos   = all_positive_tweets[i1:] # generating validation set for positive tweets
+    train_pos  = all_positive_tweets[:i1]# generating training set for positive tweets
 
     # Split negative set into validation and training
-    val_neg   = all_negative_tweets[80000:160000] # generating validation set for negative tweets
-    train_neg  = all_negative_tweets[:80000] # generating training set for nagative tweets
+    val_neg   = all_negative_tweets[i1:] # generating validation set for negative tweets
+    train_neg  = all_negative_tweets[:i1] # generating training set for nagative tweets
 
     # Delete all_positive_tweets and all_negative_tweets from memory
     del all_positive_tweets

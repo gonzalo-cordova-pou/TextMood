@@ -43,7 +43,7 @@ output_dir = '../models/{}/'.format(choose_version)
 
 # Initialize using pre-trained weights
 print("Initializing model...")
-model.init_from_file(output_dir + 'CHECKP_{}.pkl.gz'.format(choose_version), weights_only=True)
+model.init_from_file(output_dir + 'checkpoint.pkl.gz'.format(choose_version), weights_only=True)
 
 # try a positive sentence
 print("Testing model...")

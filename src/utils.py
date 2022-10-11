@@ -11,7 +11,10 @@ import numpy as np
 import random as rnd
 from trax.supervised import training
 from pathlib import Path
+
+print("Loading TweetTokenizer...")
 tweet_tokenizer = TweetTokenizer(preserve_case=False, strip_handles=True, reduce_len=True)
+print("Finsihed loading TweetTokenizer")
 
 def load_data():
     prepared_folder_path = Path("data/processed")
@@ -64,20 +67,17 @@ def load_data():
 
     return train_pos, train_neg, val_pos, val_neg, train_x, val_x, train_y, val_y, Vocab 
 
-# Stop words are messy and not that compelling; 
-# "very" and "not" are considered stop words, but they are obviously expressing sentiment
 
-# The porter stemmer lemmatizes "was" to "wa".  Seriously???
-
+print("Loading stopwords and stemmer...")
 # I'm not sure we want to get into stop words
 stopwords_english = stopwords.words('english')
-
 # Also have my doubts about stemming...
 from nltk.stem import PorterStemmer
 stemmer = PorterStemmer()
+print("Finished loading stopwords and stemmer")
 
-def provisional_load_tweets():
-    df_raw = pd.read_csv('training.1600000.processed.noemoticon.csv', encoding = "ISO-8859-1", header=None)
+def provisional_load_tweets(size=10000):
+    df_raw = pd.read_csv('./data/training.1600000.processed.noemoticon.csv', encoding = "ISO-8859-1", header=None)
     # As the data has no column titles, we will add our own
     df_raw.columns = ["label", "time", "date", "query", "username", "text"]
 
@@ -90,15 +90,14 @@ def provisional_load_tweets():
     # Only retaining 1/4th of our data from each output group
     # Feel free to alter the dividing factor depending on your workspace
     # 1/64 is a good place to start if you're unsure about your machine's power
-    df_pos = df_pos.iloc[:int(len(df_pos)/6)]
-    df_neg = df_neg.iloc[:int(len(df_neg)/6)]
+    df_pos = df_pos.iloc[:int(size/2)]
+    df_neg = df_neg.iloc[:int(size/2)]
     print(len(df_pos), len(df_neg))
 
     all_positive_tweets = df_pos.text.to_list()
     all_negative_tweets = df_neg.text.to_list()
 
     return all_positive_tweets, all_negative_tweets
-
 
 def process_tweet(tweet):
     '''
@@ -131,7 +130,6 @@ def process_tweet(tweet):
             clean_tweet.append(stem_word)
     
     return clean_tweet
-
 
 def tweet2tensor(tweet, vocab_dict, unk_token='__UNK__', verbose=False):
     '''

@@ -16,7 +16,7 @@ class TextMoodModel():
 
         print("Loading vocab...")
         try:
-            with open(self.directory+'vocab.json', 'r') as f_p:
+            with open(self.directory+'Vocab.json', 'r') as f_p:
                 self.vocab = json.load(f_p)
         except:
             raise Exception("vocab file not found. Please check the model directory.")      

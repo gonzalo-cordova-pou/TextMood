@@ -17,9 +17,9 @@ results on test data:
 co2_eq_emissions:
 - emissions: 1.2g CO2
 - source: CodeCarbon
-training_type: pre-training
-geographical_location: Barcelona
-hardware used: 
+- training_type: pre-training
+- geographical_location: Barcelona
+- hardware used: 12 CPU (i7-9750H CPU @ 2.60GHz)
 ---
 # TextMood Model Card
 

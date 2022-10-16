@@ -36,7 +36,7 @@ results on test data:
 * Model version: 3.0
 * Send questions or comments about the model to textmoodupc@gmail.com
 
-![Model architecture](./static/nn.jpg)
+![Model architecture](./static/new_nn.jpg)
 ### Intended use
 * Intended to be strictly used to detect and classify user's mood. It is not allowed to benefit or make a profit from this information.
 * Not intended to make judgments about specific users

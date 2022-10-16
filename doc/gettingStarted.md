@@ -10,7 +10,7 @@
 
 ---
 
-- Make sure to set up your Python3 virtual enviroment. This is not mandatory, but highly recommended. To know more about pytohn virtual enviroments access [here](https://realpython.com/python-virtual-environments-a-primer/#why-do-you-need-virtual-environments)
+- Make sure to set up your Python3 virtual enviroment. This is not mandatory, but highly recommended. To know more about python virtual enviroments access [here](https://realpython.com/python-virtual-environments-a-primer/#why-do-you-need-virtual-environments)
 
 - Make sure to install all the required packages using:
 ```

@@ -9,15 +9,15 @@ import our_model as cl
 import json
 
 # Choose the model version
-choose_version = 'model_0'
+CHOOSE_VERSION = 'model_0'
 
 # Load Vocab
 print("Loadin vocab...")
 with open('Vocab.json', 'r') as fp:
     Vocab = json.load(fp)
 
-# this is used to predict on your own sentnece
 def predict(sentence):
+    ''' Predict on your own sentnece'''
     inputs = np.array(u.tweet2tensor(sentence, vocab_dict=Vocab))
     # Batch size 1, add dimension for batch, to work with the model
 
@@ -38,23 +38,24 @@ print("Loadin model architecture...")
 # Load the model architecture
 model = cl.classifier(len(Vocab))
 
-OUTPUT_DIR = './models/{}/'.format(choose_version)
+OUTPUT_DIR = './models/{}/'.format(CHOOSE_VERSION)
 
 # Initialize using pre-trained weights
 print("Initializing model...")
-model.init_from_file(OUTPUT_DIR + 'checkpoint.pkl.gz'.format(choose_version), weights_only=True)
+model.init_from_file(OUTPUT_DIR + 'checkpoint.pkl.gz'.format(CHOOSE_VERSION), weights_only=True)
 
-# try a positive sentence
+# try a positive SENTENCE
 print("Testing model...")
-sentence = "It's such a nice day, think i'll be taking Sid to Ramsgate fish and chips for lunch at Peter's fish factory and then the beach maybe"
-tmp_pred, tmp_sentiment = predict(sentence)
-print(f"The sentiment of the sentence \n***\n\"{sentence}\"\n***\nis {tmp_sentiment}.")
+# pylint: disable=line-too-long
+SENTENCE = "It's such a nice day, think i'll be taking Sid to Ramsgate fish and chips for lunch at Peter's fish factory and then the beach maybe"
+tmp_pred, tmp_sentiment = predict(SENTENCE)
+print(f"The sentiment of the SENTENCE \n***\n\"{SENTENCE}\"\n***\nis {tmp_sentiment}.")
 
 print()
-# try a negative sentence
-sentence = "I hated my day, it was the worst, I'm so sad."
-tmp_pred, tmp_sentiment = predict(sentence)
-print(f"The sentiment of the sentence \n***\n\"{sentence}\"\n***\nis {tmp_sentiment}.")
+# try a negative SENTENCE
+SENTENCE = "I hated my day, it was the worst, I'm so sad."
+tmp_pred, tmp_sentiment = predict(SENTENCE)
+print(f"The sentiment of the SENTENCE \n***\n\"{SENTENCE}\"\n***\nis {tmp_sentiment}.")
 
 # Load the model from SavedModel.
 #loaded_model = tf.keras.models.load_model('./keras_model/model_checkpoint/')

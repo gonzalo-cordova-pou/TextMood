@@ -17,6 +17,7 @@ results on test data:
 ---
 # TextMood Model Card
 
+For a QuickStart click [here](./doc/gettingStarted.md).
 
 ## Table of Contents
 - [Model details](#Model-details)

@@ -1,34 +1,53 @@
+"""
+team: TextMood
+main_author: @gonzalo-cordova-pou
+date: 2020-05-01
+description: This script is used to train and evaluate the model choosing the best hyperparameters.
+             Results are loaded to comet.ml
+"""
+
 import random as rnd
 import os
-import trax
-from trax.supervised import training
-from comet_ml import Experiment
 import json
-import mlflow
+from comet_ml import Experiment
+import trax
+from trax import fastmath
+from trax.supervised import training
+from trax import layers as tl
+import tensorflow as tf
+from codecarbon import EmissionsTracker
 import our_model as cl
 import prepare as pr
-import comet_ml
-from mlflow import pyfunc
-from trax import fastmath
-import tensorflow as tf
-from trax import layers as tl
-from codecarbon import EmissionsTracker
 import utils as u
 # import trax.layers
 
-NAME = 'model_0'
-training_batch_size = 64
-validation_batch_size = 64
-steps = 200
-size = 20000 #1000000
-training_percentage = 0.8
-output_dir = './models/{}/'.format(NAME)
+NAME = 'MODEL_xlarge_10'
+TRAINING_BATCH_SIZE = 256
+VALIDATION_BATCH_SIZE = 128
+STEPS = 500
+SIZE = 1600000
+TRAINING_PERCENTAGE = 0.7
+EMBEDDING_DIM = 256
+INNER_DIM = 50
+LR = 0.01
+OPT = "Adam" # choices are "Adam", "SGD"
+OUTPUT_DIR = f"./models/{NAME}/"
 
-experiment = Experiment(api_key="0mrbguygGOIO4Gs0ocFddjomE")
+experiment = Experiment(
+    api_key="0mrbguygGOIO4Gs0ocFddjomE",
+    project_name="TEXTMOOD_CO2_TRACKING",
+    workspace="textmood",
+    log_graph=True,
+    auto_param_logging=True,
+    auto_metric_logging=True,
+    auto_metric_step_rate=1,)
+
+experiment.set_name(NAME)
+
 tracker=EmissionsTracker()
 tracker.start()
 
-train_pos, train_neg, val_pos, val_neg, train_x, val_x, train_y, val_y, Vocab = pr.preparation(size, training_percentage)
+train_pos, train_neg, val_pos, val_neg, train_x, val_x, train_y, val_y, Vocab = pr.preparation(SIZE, TRAINING_PERCENTAGE)
 
 
 print("Length train_pos: ", len(train_pos))
@@ -66,125 +85,83 @@ inputs, targets, example_weights = next(train_generator(4, shuffle=True))
 print("####### CHECKPOINT 2 ########")
 
 np = fastmath.numpy
-
-# use the fastmath.random module from trax
-random = fastmath.random
-
-tmp_key = random.get_prng(seed=1)
-tmp_shape=(2,3)
-
-# Generate a weight matrix
-# Note that you'll get an error if you try to set dtype to tf.float32, where tf is tensorflow
-# Just avoid setting the dtype and allow it to use the default data type
-tmp_weight = trax.fastmath.random.normal(key=tmp_key, shape=tmp_shape)
-
-print("Weight matrix generated with a normal distribution with mean 0 and stdev of 1")
-#display(tmp_weight)
-
-tmp_embed = tl.Embedding(vocab_size=3, d_feature=2)
-#display(tmp_embed)
+random = fastmath.random # use the fastmath.random module from trax
 
 # ================
 # MODEL TRAINING #
 # ================
 
-tmp_model = cl.classifier(len(Vocab))
-
 rnd.seed(271)
 
 print("####### CHECKPOINT 3 ########")
 
-mlflow.tensorflow.autolog()
+# create directory for model
+if not os.path.exists(OUTPUT_DIR):
+    os.makedirs(OUTPUT_DIR)
 
-with mlflow.start_run(run_name=NAME) as run:
+# Save Vocab to file
+with open(OUTPUT_DIR+'Vocab.json', 'w', encoding="utf-8") as fp:
+    json.dump(Vocab, fp)
 
-    # create directory for model
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-
-    # Save Vocab to file
-    with open(output_dir+'Vocab.json', 'w', encoding="utf-8") as fp:
-        json.dump(Vocab, fp)
-
-    # Choose an optimizer and log it to mlflow
-    LR = 0.01
-    OPT = "Adam" # choices are "Adam", "SGD"
-    if OPT == "SGD":
-        optimizer = trax.optimizers.SGD(learning_rate=LR)
-    else:
-        optimizer = trax.optimizers.Adam(learning_rate=LR)
-    mlflow.log_param("optimizer", OPT)
+# Choose an optimizer and log it to mlflow
+if OPT == "SGD":
+    optimizer = trax.optimizers.SGD(learning_rate=LR)
+else:
+    optimizer = trax.optimizers.Adam(learning_rate=LR)
+experiment.log_parameter("optimizer", OPT)
 
 
-    train_task = training.TrainTask(
-        labeled_data=train_generator(batch_size=training_batch_size, shuffle=True),
-        loss_layer=tl.CrossEntropyLoss(),
-        optimizer=optimizer,
-        n_steps_per_checkpoint=10,
-    )
+train_task = training.TrainTask(
+    labeled_data=train_generator(batch_size=TRAINING_BATCH_SIZE, shuffle=True),
+    loss_layer=tl.CrossEntropyLoss(),
+    optimizer=optimizer,
+    n_steps_per_checkpoint=10,
+)
 
-    eval_task = training.EvalTask(
-        labeled_data=val_generator(batch_size=validation_batch_size, shuffle=True),
-        metrics=[tl.CrossEntropyLoss(), tl.Accuracy()],
-    )
+eval_task = training.EvalTask(
+    labeled_data=val_generator(batch_size=VALIDATION_BATCH_SIZE, shuffle=True),
+    metrics=[tl.CrossEntropyLoss(), tl.Accuracy()],
+)
 
-    model = cl.classifier(len(Vocab))
+model = cl.classifier(len(Vocab), embedding_dim=EMBEDDING_DIM, inner_dim=INNER_DIM)
+experiment.log_parameter("embedding_dim", EMBEDDING_DIM)
+experiment.log_parameter("inner_dim", INNER_DIM)
 
-    print("####### CHECKPOINT 4 ########")
+print("####### CHECKPOINT 4 ########")
 
-    training_loop = u.train_model(model, train_task, eval_task, steps, output_dir)
-    training_loop.save_checkpoint('checkpoint')
+tf.debugging.set_log_device_placement(True)
+with tf.device('/GPU:0'):
+    training_loop = u.train_model(model, train_task, eval_task, STEPS, OUTPUT_DIR)
+training_loop.save_checkpoint('checkpoint')
 
-    print("####### CHECKPOINT 5 ########")
+print("####### CHECKPOINT 5 ########")
 
-    # ================ #
-    # MODEL EVALUATION #
-    # ================ #
+# ================ #
+# MODEL EVALUATION IN TEST DATA#
+# ================ #
 
-    # test your function
-    tmp_val_generator = val_generator(64)
+# testing the accuracy of your model: this takes around 20 seconds
+model = training_loop.eval_model
 
+accuracy = u.test_model(test_generator(16), model)
+print(accuracy)
+print(f'The accuracy of your model on the validation set is {accuracy:.4f}', )
 
-    # get one batch
-    tmp_batch = next(tmp_val_generator)
+experiment.log_parameter("training_batch_size", TRAINING_BATCH_SIZE)
+experiment.log_parameter("validation_batch_size", VALIDATION_BATCH_SIZE)
+experiment.log_parameter("steps", STEPS)
+experiment.log_parameter("training_size", len(train_x))
+experiment.log_parameter("validation_size", len(val_x))
+experiment.log_parameter("training_percent", TRAINING_PERCENTAGE)
+experiment.log_metric("val_accuracy", float(accuracy))
 
-    # Position 0 has the model inputs (tweets as tensors)
-    # position 1 has the targets (the actual labels)
-    tmp_inputs, tmp_targets, tmp_example_weights = tmp_batch
+#mlflow.log_metric("train_loss", train_loss)
+#mlflow.log_metric("train_accuracy", train_acc)
+#mlflow.log_metric("val_loss", val_loss)
+#mlflow.log_artifacts("./model")
 
-    # feed the tweet tensors into the model to get a prediction
-    tmp_pred = training_loop.eval_model(tmp_inputs)
+emissions = tracker.stop()
+print("Emissions: ", float(emissions))
+experiment.log_metric("emissions", float(emissions))
 
-    tmp_acc, tmp_num_correct, tmp_num_predictions = u.compute_accuracy(preds=tmp_pred, y=tmp_targets, y_weights=tmp_example_weights)
-
-    print(f"Model's prediction accuracy on a single training batch is: {100 * tmp_acc}%")
-    print(f"Weighted number of correct predictions {tmp_num_correct}; weighted number of total observations predicted {tmp_num_predictions}")
-
-    # ================ #
-    # MODEL EVALUATION IN TEST DATA#
-    # ================ #
-
-    # testing the accuracy of your model: this takes around 20 seconds
-    model = training_loop.eval_model
-
-    accuracy = u.test_model(test_generator(16), model)
-    print(accuracy)
-    print(f'The accuracy of your model on the validation set is {accuracy:.4f}', )
-
-    mlflow.log_param("training_batch_size", training_batch_size)
-    mlflow.log_param("validation_batch_size", validation_batch_size)
-    mlflow.log_param("steps", steps)
-    mlflow.log_param("training_size", len(train_x))
-    mlflow.log_param("validation_size", len(val_x))
-    mlflow.log_param("training_percent", training_percentage)
-    mlflow.log_metric("val_accuracy", float(accuracy))
-    mlflow.log_artifacts("./models")
-    #mlflow.log_metric("train_loss", train_loss)
-    #mlflow.log_metric("train_accuracy", train_acc)
-    #mlflow.log_metric("val_loss", val_loss)
-    #mlflow.log_artifacts("./model")
-
-    emissions: float = tracker.stop()
-    print("Emissions: ", emissions)
-
-    mlflow.end_run()
+experiment.end()

@@ -1,6 +1,8 @@
 import json
+from pyexpat import model
 import our_model as cl
 import utils as u
+from pathlib import Path
 from trax import fastmath
 
 # use the numpy module from trax
@@ -12,7 +14,7 @@ class TextMoodModel():
 
         
         self.name = model_name
-        self.directory = '../models/{}/'.format(model_name)
+        self.directory = f"../models/{model_name}/"
         
         print("Loading vocab...")
         try:
@@ -68,3 +70,9 @@ class TextMoodModel():
             raise Exception("Model not initialized. Please run self.initialize_model() first.")
         
         return [self.predict(sentence) for sentence in sentences]
+
+def get_model_names():
+    """
+    Get the names of all the models in the models directory.
+    """
+    return [x.name for x in Path('../models/').iterdir() if x.is_dir()]

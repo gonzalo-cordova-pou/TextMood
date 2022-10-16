@@ -12,8 +12,8 @@ metrics:
 - Accuracy
 - Cross entropy loss
 results on test data:
-- Accuracy = 0.688
-- Cross entropy loss = 0.491
+- Accuracy = 0.756
+- Cross entropy loss = 0.451
 co2_eq_emissions:
 - emissions: 1.2g CO2
 - source: CodeCarbon
@@ -39,8 +39,8 @@ For a QuickStart click [here](./doc/gettingStarted.md).
 * Sentiment classification task with deep neural networks using social networks data
 * In particular, detection of users' mood classifying it as positive or negative by simply reading their tweets
 * Developed by the TextMood team in the context of TAED II course
-* Model date: September 2022
-* Model version: 3.0
+* Model date: October 2022
+* Model version: 4.0
 * Send questions or comments about the model to textmoodupc@gmail.com
 
 ![Model architecture](./static/new_nn.jpg)

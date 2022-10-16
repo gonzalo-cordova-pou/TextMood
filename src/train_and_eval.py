@@ -19,9 +19,10 @@ from codecarbon import EmissionsTracker
 import our_model as cl
 import prepare as pr
 import utils as u
+from pathlib import Path
 # import trax.layers
 
-NAME = 'MODEL_xlarge_11'
+NAME = 'model_xlarge_11'
 TRAINING_BATCH_SIZE = 256
 VALIDATION_BATCH_SIZE = 128
 STEPS = 500
@@ -32,6 +33,9 @@ INNER_DIM = 50
 LR = 0.01
 OPT = "Adam" # choices are "Adam", "SGD"
 OUTPUT_DIR = f"./models/{NAME}/"
+
+if NAME in [x.name for x in Path('./models/').iterdir() if x.is_dir()]:
+    raise Exception("Model name already exists. Please choose another name.")
 
 experiment = Experiment(
     api_key="0mrbguygGOIO4Gs0ocFddjomE",

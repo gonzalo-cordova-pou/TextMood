@@ -5,7 +5,7 @@ import nltk
 nltk.download('twitter_samples')
 nltk.download('stopwords')
 from nltk.tokenize import TweetTokenizer
-from nltk.corpus import stopwords, twitter_samples 
+from nltk.corpus import stopwords, twitter_samples
 import pandas as pd
 import numpy as np
 import random as rnd
@@ -17,10 +17,11 @@ tweet_tokenizer = TweetTokenizer(preserve_case=False, strip_handles=True, reduce
 print("Finsihed loading TweetTokenizer")
 
 def load_data():
+    '''Read and load data'''
     prepared_folder_path = Path("data/processed")
-    X_train_path = prepared_folder_path / "X_train.txt"
+    x_train_path = prepared_folder_path / "X_train.txt"
     y_train_path = prepared_folder_path / "y_train.txt"
-    X_valid_path = prepared_folder_path / "X_valid.txt"
+    x_valid_path = prepared_folder_path / "X_valid.txt"
     y_valid_path = prepared_folder_path / "y_valid.txt"
     train_pos_path = prepared_folder_path / "train_pos.txt"
     train_neg_path = prepared_folder_path / "train_neg.txt"
@@ -28,11 +29,11 @@ def load_data():
     val_neg_path = prepared_folder_path / "val_neg.txt"
     vocab_path = prepared_folder_path / "vocab.json"
 
-    train_x = open(X_train_path, encoding = 'utf-8').readlines()
+    train_x = open(x_train_path, encoding = 'utf-8').readlines()
     for i in range(len(train_x)):
         train_x[i] = train_x[i].replace('\n', '')
 
-    val_x = open(X_valid_path, encoding = 'utf-8').readlines()
+    val_x = open(x_valid_path, encoding = 'utf-8').readlines()
     for i in range(len(val_x)):
         val_x[i] = val_x[i].replace('\n', '')
 
@@ -63,9 +64,9 @@ def load_data():
     train_y = np.array(train_y)
 
     json_file = open(vocab_path, 'r', encoding = 'utf-8')
-    Vocab = json.load(json_file)
+    vocab = json.load(json_file)
 
-    return train_pos, train_neg, val_pos, val_neg, train_x, val_x, train_y, val_y, Vocab 
+    return train_pos, train_neg, val_pos, val_neg, train_x, val_x, train_y, val_y, vocab 
 
 
 print("Loading stopwords and stemmer...")
@@ -77,6 +78,7 @@ stemmer = PorterStemmer()
 print("Finished loading stopwords and stemmer")
 
 def provisional_load_tweets(size=10000):
+    '''Provisional data'''
     df_raw = pd.read_csv('./data/training.1600000.processed.noemoticon.csv', encoding = "ISO-8859-1", header=None)
     # As the data has no column titles, we will add our own
     df_raw.columns = ["label", "time", "date", "query", "username", "text"]
@@ -105,7 +107,6 @@ def process_tweet(tweet):
         tweet: a string containing a tweet
     Output:
         clean_tweet: a list of words containing the processed tweet
-    
     '''
 
     # remove stock market tickers like $GE
@@ -120,7 +121,7 @@ def process_tweet(tweet):
     # tokenize tweets
     tokenizer = TweetTokenizer(preserve_case=False, strip_handles=True, reduce_len=True)
     tweet_tokens = tokenizer.tokenize(tweet)
-    
+   
     clean_tweet = []
     for word in tweet_tokens:
         if (word not in stopwords_english and # remove stopwords
@@ -128,20 +129,19 @@ def process_tweet(tweet):
             #clean_tweet.append(word)
             stem_word = stemmer.stem(word) # stemming word
             clean_tweet.append(stem_word)
-    
+   
     return clean_tweet
 
 def tweet2tensor(tweet, vocab_dict, unk_token='__UNK__', verbose=False):
     '''
-    Input: 
+    Input:
         tweet - A string containing a tweet
         vocab_dict - The words dictionary
         unk_token - The special string for unknown tokens
         verbose - Print info durign runtime
     Output:
         tensor - A python list withunique integer IDs
-        representing the processed tweet
-        
+        representing the processed tweet 
     '''
 
     # Process the tweet into a clean list of words
@@ -149,14 +149,14 @@ def tweet2tensor(tweet, vocab_dict, unk_token='__UNK__', verbose=False):
 
     tensor = []
 
-    unk_ID = vocab_dict[unk_token] # unknown token id
+    unk_id = vocab_dict[unk_token] # unknown token id
 
     for word in words:
 
         # Get the unique integer id of each word
 
-        word_ID = vocab_dict[word] if word in vocab_dict else unk_ID
-        tensor.append(word_ID) 
+        word_id = vocab_dict[word] if word in vocab_dict else unk_id
+        tensor.append(word_id)
 
 
     return tensor
@@ -173,8 +173,7 @@ def data_generator(data_pos, data_neg, batch_size, loop, vocab_dict, shuffle=Fal
     Yield:
         inputs - Subset of positive and negative examples
         targets - The corresponding labels for the subset
-        example_weights - An array specifying the importance of each example
-        
+        example_weights - An array specifying the importance of each example    
     '''     
     
     # make sure the batch size is an even number
@@ -205,7 +204,7 @@ def data_generator(data_pos, data_neg, batch_size, loop, vocab_dict, shuffle=Fal
     stop = False
     
     # Loop indefinitely
-    while not stop:  
+    while not stop: 
         
         # create a batch with positive and negative examples
         batch = []
@@ -357,20 +356,20 @@ def train_model(classifier, train_task, eval_task, n_steps, output_dir):
 def compute_accuracy(preds, y, y_weights):
     """
     Input: 
-        preds: a tensor of shape (dim_batch, output_dim) 
+        preds: a tensor of shape (dim_batch, output_dim)
         y: a tensor of shape (dim_batch, output_dim) with the true labels
         y_weights: a n.ndarray with the a weight for each example
     Output: 
-        accuracy: a float between 0-1 
+        accuracy: a float between 0-1
         weighted_num_correct (np.float32): Sum of the weighted correct predictions
         sum_weights (np.float32): Sum of the weights
     """
     
-    # Create an array of booleans, 
+    # Create an array of booleans,
     # True if the probability of positive sentiment is greater than
     # the probability of negative sentiment
     # else False
-    is_pos =  preds[:, 1] > preds[:, 0] 
+    is_pos =  preds[:, 1] > preds[:, 0]
 
     # convert the array of booleans into an array of np.int32
     is_pos_int = is_pos.astype(np.int32)
@@ -401,7 +400,7 @@ def test_model(generator, model):
     '''
     Input: 
         generator: an iterator instance that provides batches of inputs and targets
-        model: a model instance 
+        model: a model instance
     Output: 
         accuracy: float corresponding to the accuracy
     '''
@@ -432,7 +431,7 @@ def test_model(generator, model):
         # by adding the number of correct predictions from this batch
         total_num_correct += batch_num_correct
         
-        # Update the total number of predictions 
+        # Update the total number of predictions
         # by adding the number of predictions made for the batch
         total_num_pred += batch_num_pred
 
@@ -441,9 +440,9 @@ def test_model(generator, model):
     
     return accuracy
 
-# this is used to predict on your own sentnece
-def predict(sentence, Vocab, model):
-    inputs = np.array(tweet2tensor(sentence, vocab_dict=Vocab))
+def predict(sentence, vocab, model):
+    '''Predict on your own sentnece'''
+    inputs = np.array(tweet2tensor(sentence, vocab_dict=vocab))
     
     # Batch size 1, add dimension for batch, to work with the model
     inputs = inputs[None, :]  

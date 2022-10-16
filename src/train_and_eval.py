@@ -21,7 +21,7 @@ import prepare as pr
 import utils as u
 # import trax.layers
 
-NAME = 'MODEL_xlarge_10'
+NAME = 'MODEL_xlarge_11'
 TRAINING_BATCH_SIZE = 256
 VALIDATION_BATCH_SIZE = 128
 STEPS = 500
@@ -47,8 +47,8 @@ experiment.set_name(NAME)
 tracker=EmissionsTracker()
 tracker.start()
 
-train_pos, train_neg, val_pos, val_neg, train_x, val_x, train_y, val_y, Vocab = pr.preparation(SIZE, TRAINING_PERCENTAGE)
-
+[train_pos, train_neg, val_pos, val_neg, train_x,
+val_x, train_y, val_y, Vocab] = pr.preparation(SIZE, TRAINING_PERCENTAGE)
 
 print("Length train_pos: ", len(train_pos))
 print("Length train_neg: ", len(train_neg))
@@ -64,16 +64,17 @@ print("Length Vocab: ", len(Vocab))
 # TRAINING SETUP #
 # ================ #
 
-# Create the training data generator
+
 def train_generator(batch_size, shuffle = False):
+    '''Create the training data generator'''
     return u.data_generator(train_pos, train_neg, batch_size, True, Vocab, shuffle)
 
-# Create the validation data generator
 def val_generator(batch_size, shuffle = False):
+    '''Create the validation data generator'''
     return u.data_generator(val_pos, val_neg, batch_size, True, Vocab, shuffle)
 
-# Create the validation data generator
 def test_generator(batch_size, shuffle = False):
+    '''Create the validation data generator'''
     return u.data_generator(val_pos, val_neg, batch_size, False, Vocab, shuffle)
 
 # Set the random number generator for the shuffle procedure

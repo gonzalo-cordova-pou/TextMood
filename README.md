@@ -62,7 +62,7 @@ For a QuickStart click [here](./doc/gettingStarted.md).
 * The same preprocessing steps are applied as we use the same dataset
 ### Quantitative analyses
 
-All the different versions of our models, alongside with the parameters used and metrics obtained, can be checked in our Comet panel following the next
+All the different versions of our model, alongside with the parameters used and metrics obtained, can be checked in our Comet panel following the next
 link: https://www.comet.com/textmood/textmood-co2-tracking/view/new/experiments
 ### Ethical considerations
 * TextMood team follows values such as transparency, privacy, non-discrimination and societal and environmental wellbeing

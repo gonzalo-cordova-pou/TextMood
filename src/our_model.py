@@ -1,7 +1,7 @@
 import trax_models
 from trax import layers as tl
 
-def classifier(vocab_size, embedding_dim=256, output_dim=2, mode='train'):
+def classifier(vocab_size, embedding_dim=256, inner_dim=10, output_dim=2, mode='train'):
     
     # create embedding layer
     embed_layer = tl.Embedding(
@@ -10,6 +10,8 @@ def classifier(vocab_size, embedding_dim=256, output_dim=2, mode='train'):
     
     # Create a mean layer, to create an "average" word embedding
     mean_layer = tl.Mean(axis=1)
+
+    dense_inner_layer = tl.Dense(n_units=inner_dim)
     
     # Create a dense layer, one unit for each output
     dense_output_layer = tl.Dense(n_units = output_dim)
@@ -24,9 +26,10 @@ def classifier(vocab_size, embedding_dim=256, output_dim=2, mode='train'):
     model = tl.Serial(
       embed_layer, # embedding layer
       mean_layer, # mean layer
-      dense_output_layer, # dense output layer 
+      dense_inner_layer, # dense layer
+      dense_output_layer, # dense output layer
       log_softmax_layer  # log softmax layer
-    )    
+    )
     
     # return the model of type
     return model

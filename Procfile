@@ -1,1 +1,1 @@
-web: gunicorn textmood.wsgi --log-file -
+web: gunicorn textmoodapp.wsgi --log-file -

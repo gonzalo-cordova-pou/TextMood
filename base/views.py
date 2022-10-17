@@ -104,4 +104,3 @@ def registerPage(request):
 def classifyTweet(request, pk):
     context = {}
     return render(request, 'base/main_page.html', context)
-

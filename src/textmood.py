@@ -1,6 +1,5 @@
 import json
 import os
-from pyexpat import model
 import our_model as cl
 import utils as u
 from pathlib import Path

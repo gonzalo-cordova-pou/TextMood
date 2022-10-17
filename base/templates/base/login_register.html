@@ -1,0 +1,60 @@
+{% extends 'base/main_page.html' %}
+{% block body %}
+{% if page == 'login' %}
+<section class="bg-dark text-light pb-5 d-flex align-items-center justify-content-center" style="padding-top: 0px;">
+    <div class="card text-dark" style="width: 18rem;">
+
+        <div class="card-body text-ali">
+            <div class="card-header text-start">
+                <h4><span class="fw-bold">Sign up</span></h4>
+            </div>
+            <form class="form" action="" method="POST">
+                {% csrf_token %}
+                <div class="mb-3 px-3 py-2">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name = "username" placeholder="juan peter">
+                </div>
+                <div class="mb-3 px-3 py-2">
+                    <label for="password" class="form-label" >Password</label>
+                    <input id="password" class="form-control" name="password" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" />
+                </div> 
+                <button type="submit" class="btn btn-dark m-2">Confirm identity</button>
+            </form>
+            <div class="card-footer">
+                <p>Haven't you signed up?</p>
+                <a href="{% url 'base:register' %}" class="btn btn--link">Sign Up</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% else %}
+<section class="bg-dark text-light pb-5 d-flex align-items-center justify-content-center" style="padding-top: 0px;">
+    <div class="card text-dark" style="width: 18rem;">
+
+        <div class="card-body text-ali">
+            <div class="card-header text-start">
+                <h4><span class="fw-bold">Sign up</span></h4>
+            </div>
+            <form class="form" action="" method="POST">
+                {% csrf_token %}
+
+                {% for field in form %}
+                <div class="mb-3 px-3 py-2">
+                    <label for="room_name">{{field.label}}</label>
+                    {{field}}
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-dark m-2">Confirm registration</button>
+            </form>
+            <div class="card-footer">
+                <p>Already signed up yet?</p>
+                <a href="{% url 'base:login' %}" class="btn btn--link">Login</a>
+            </div>
+            
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+
+  

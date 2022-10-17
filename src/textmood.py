@@ -1,18 +1,24 @@
 import json
+import os
 from pyexpat import model
 import our_model as cl
 import utils as u
 from pathlib import Path
 from trax import fastmath
 
+DIRNAME = os.path.dirname(__file__)
+
 # use the numpy module from trax
 np = fastmath.numpy
 
 class TextMoodModel():
     '''Check model'''
-    def __init__(self, model_name):      
+    def __init__(self, model_name, production=False):      
         self.name = model_name
-        self.directory = f"../models/{model_name}/"
+        if production:
+            self.directory = os.path.join(DIRNAME, f"../base/{model_name}/")
+        else:
+            self.directory = f"../models/{model_name}/"
 
         print("Loading vocab...")
         try:

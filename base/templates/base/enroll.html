@@ -1,0 +1,71 @@
+{% extends 'base/main_page.html' %}
+{% block body %}
+<section class="bg-dark text-light pb-5 d-flex align-items-center justify-content-center" style="padding-top: 0px;">
+    <div class="jumbotron">
+        {% if request.user.is_authenticated %}
+        <h1 class="display-4">Hello {{request.user.username}}!</h1>
+        <p class="lead">This is textMood API, introduce any text so that we can analyze it sentimentally</p>
+        <hr class="my-4">
+        <p class="lead">
+            <form class="form" action="" method="POST">
+                {% csrf_token %}
+                <div class="mb-3 px-3 py-2">
+                    <label for="class_text" class="form-label">Introduce your text here</label>
+                    <input type="text" class="form-control" id="class_text" name = "sentence" placeholder="I'm feeling great today">
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg">Submit sentence</button>
+            </form>
+        </p>
+            {% if not classified %}
+                <section class="bg-dark text-light d-flex align-items-center justify-content-center" style="padding-top: 20px;padding-bottom: 110px;">
+                    <span class="buttonicondef">
+                        <ion-icon name="happy-outline"></ion-icon>
+                    </span>
+                    <span class="buttonicondef">
+                        <ion-icon name="sad-outline"></ion-icon>
+                    </span>
+                </section>
+            {% else %}
+                <section class="bg-dark text-light d-flex align-items-center justify-content-center" style="padding-top: 10px;padding-bottom: 5px;">
+                        <span class="sentence">{{ sentence }}</span>
+                </section>
+                {% if result %}
+                    <section class="bg-dark text-light d-flex align-items-center justify-content-center" style="padding-top: 5px;padding-bottom: 110px;">
+                        <span class="buttoniconP">
+                            <ion-icon name="happy-outline"></ion-icon>
+                        </span>
+                        <span class="buttonicondef">
+                            <ion-icon name="sad-outline"></ion-icon>
+                        </span>
+                    </section>
+                {% else %}
+                    <section class="bg-dark text-light d-flex align-items-center justify-content-center" style="padding-top: 20px;padding-bottom: 110px;">
+                        <span class="buttonicondef">
+                            <ion-icon name="happy-outline"></ion-icon>
+                        </span>
+                        <span class="buttoniconF">
+                            <ion-icon name="sad-outline"></ion-icon>
+                        </span>
+                    </section>
+                {% endif %}
+                <section class="bg-dark text-light d-flex align-items-center justify-content-center" style="padding-top: 10px;padding-bottom: 5px;">
+                    <span class="agree"> Agree with classification ? </span>
+                </section>
+                <section class="bg-dark text-light d-flex align-items-center justify-content-center" style="padding-top: 10px;padding-bottom: 5px;">
+                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        <button type="button" class="btn btn-danger"><a href = "{% url 'base:savedataN' id %}"><ion-icon name="close-outline"></ion-icon></a></button>
+                        <button type="button" class="btn btn-success"><a href = "{% url 'base:savedataP' id %}"><ion-icon name="checkmark-outline"></ion-icon></a></button>
+                    </div>
+                </section>
+            {% endif %}
+            {% else %}
+        <h1 class="display-4">Welcome to TextMood</h1>
+        <p class="lead">This is textMood API, where you can introduce any text so that we can analyze it sentimentally.Please sign up before submitting your request</p>
+        <hr class="my-4">
+        <p class="lead">
+            <a class="btn btn-primary btn-lg" href="{% url 'base:login' %}" role="button">Sign up</a>
+        </p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

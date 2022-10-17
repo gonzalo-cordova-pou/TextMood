@@ -1,1 +1,0 @@
-web: gunicorn TextMood_API.wsgi --log-file -

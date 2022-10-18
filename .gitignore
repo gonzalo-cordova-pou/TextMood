@@ -6,6 +6,9 @@
 
 ./models
 ./mlruns
+./base/model/checkpoint*
+./base/model/Vocab
+
 
 db.sqlite3
 *.pyc

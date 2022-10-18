@@ -6,7 +6,7 @@
 
         <div class="card-body text-ali">
             <div class="card-header text-start">
-                <h4><span class="fw-bold">Sign up</span></h4>
+                <h4><span class="fw-bold">Sign in</span></h4>
             </div>
             <form class="form" action="" method="POST">
                 {% csrf_token %}
@@ -47,8 +47,8 @@
                 <button type="submit" class="btn btn-dark m-2">Confirm registration</button>
             </form>
             <div class="card-footer">
-                <p>Already signed up yet?</p>
-                <a href="{% url 'base:login' %}" class="btn btn--link">Login</a>
+                <p>Already registered?</p>
+                <a href="{% url 'base:login' %}" class="btn btn--link">Sign in</a>
             </div>
             
         </div>

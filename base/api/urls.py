@@ -2,5 +2,6 @@ from  django.urls import path
 from . import views
 
 urlpatterns = [
-    path('base/', views.getClassification, ),
+    path('', views.getRoutes, ),
+    path('classify/', views.getClassification, ),
 ]

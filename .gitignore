@@ -6,6 +6,8 @@
 
 ./models
 ./mlruns
+./base/model
+
 
 db.sqlite3
 *.pyc

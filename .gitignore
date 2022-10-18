@@ -6,7 +6,8 @@
 
 ./models
 ./mlruns
-./base/model
+./base/model/checkpoint*
+./base/model/Vocab
 
 
 db.sqlite3

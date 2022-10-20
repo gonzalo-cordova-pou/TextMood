@@ -11,7 +11,7 @@ datasets:
 metrics:
 - Accuracy
 - Cross entropy loss
-results on test data:
+results on validation data:
 - Accuracy = 0.756
 - Cross entropy loss = 0.451
 co2_eq_emissions:

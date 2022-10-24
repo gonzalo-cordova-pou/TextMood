@@ -1,9 +1,9 @@
 The directory structure of our project: 
 
-```
-── base
+``` 
+── base                             <- Django application
 │   ├── admin.py
-│   ├── api
+│   ├── api                         <- API files
 │   │   ├── __init__.py
 │   │   ├── serializers.py
 │   │   ├── urls.py
@@ -13,19 +13,19 @@ The directory structure of our project:
 │   ├── migrations
 │   │   ├── 0001_initial.py
 │   │   └── __init__.py
-│   ├── model
+│   ├── model                       <- Where the model production is stored
 │   │   └── empty.txt
 │   ├── model.dvc
 │   ├── models.py
-│   ├── templates
+│   ├── templates                   <- HTML templates for the front-end
 │   │   └── base
 │   │       ├── enroll.html
 │   │       ├── login_register.html
 │   │       ├── main_page.html
 │   │       └── navbar.html
 │   ├── tests.py
-│   ├── urls.py
-│   └── views.py
+│   ├── urls.py                     <- Sub URLs
+│   └── views.py                    <- Back-end functions
 ├── data                            <- DVC file directory for the dataset
 │   └── training.1600000.processed.noemoticon.csv.dvc
 ├── doc                             <- More project documentation         
@@ -36,7 +36,7 @@ The directory structure of our project:
 ├── dvc.yaml                        <- DVC configuration
 ├── emissions.csv.dvc
 ├── load_model.py                   <- Loading model in production
-├── manage.py                       <- Loading model in production
+├── manage.py                       <- Main python script for Django (use framework commands)
 ├── Notebooks                       <- Notebooks (include the data analysis with GE)
 │   └── GreatExpectations.ipynb
 ├── README.md                       <- The top-level README following a model card format
@@ -53,7 +53,7 @@ The directory structure of our project:
 ├── static                          <- Provisional static files
 │   ├── new_nn.jpg
 │   └── quantitative_analysis.png
-└── TextMood_API                    <- API initialization and Django configuration 
+└── TextMood_API                    <- Django configuration 
     ├── asgi.py
     ├── __init__.py
     ├── settings.py

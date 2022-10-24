@@ -32,8 +32,8 @@ The directory structure of our project:
 │   ├── DatasetCard.md
 │   ├── gettingStarted.md
 │   └── ProjectStructure.md
-├── dvc.lock
-├── dvc.yaml
+├── dvc.lock                        <- DVC configuration
+├── dvc.yaml                        <- DVC configuration
 ├── emissions.csv.dvc
 ├── load_model.py                   <- Loading model in production
 ├── manage.py                       <- Loading model in production
@@ -53,7 +53,7 @@ The directory structure of our project:
 ├── static                          <- Provisional static files
 │   ├── new_nn.jpg
 │   └── quantitative_analysis.png
-└── TextMood_API
+└── TextMood_API                    <- API initialization and Django configuration 
     ├── asgi.py
     ├── __init__.py
     ├── settings.py

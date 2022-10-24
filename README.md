@@ -48,7 +48,7 @@ For a QuickStart click [here](./doc/gettingStarted.md).
 * Intended to be strictly used to detect and classify user's mood. It is not allowed to benefit or make a profit from this information.
 * Not intended to make judgments about specific users
 ### Factors
-* Subjectivity when evaluating the polarity of the tweet (0 = negative, 4 = positive) may affect the performance and trustworthiness of the model
+* Subjectivity when evaluating the polarity of the tweet (0 = negative, 1 = positive) may affect the performance and trustworthiness of the model
 * The model just evaluates the language. Other factors such as users' race, gender, age or health are not taken into account as the data used are simply tweets extracted by the Twitter API without collecting user's personal information.
 ### Metrics
 * Model trained using tl.CrossEntropyLoss optimized with the trax.optimizers.Adam optimizer

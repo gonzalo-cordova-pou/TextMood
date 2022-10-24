@@ -26,7 +26,7 @@ The directory structure of our project:
 │   ├── tests.py
 │   ├── urls.py
 │   └── views.py
-├── data
+├── data                            <- DVC file directory for the dataset
 │   └── training.1600000.processed.noemoticon.csv.dvc
 ├── doc                             <- More project documentation         
 │   ├── DatasetCard.md
@@ -35,8 +35,8 @@ The directory structure of our project:
 ├── dvc.lock
 ├── dvc.yaml
 ├── emissions.csv.dvc
-├── load_model.py
-├── manage.py
+├── load_model.py                   <- Loading model in production
+├── manage.py                       <- Loading model in production
 ├── Notebooks                       <- Notebooks (include the data analysis with GE)
 │   └── GreatExpectations.ipynb
 ├── README.md                       <- The top-level README following a model card format
